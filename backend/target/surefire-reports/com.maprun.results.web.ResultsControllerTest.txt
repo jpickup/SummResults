@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.maprun.results.web.ResultsControllerTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.955 s -- in com.maprun.results.web.ResultsControllerTest

@@ -27,14 +27,12 @@ function loadAppConfig(): AppConfig {
 
   return {
     apiBaseUrl: raw.apiBaseUrl.trim(),
-    day1EventId: raw.day1EventId ?? '',
-    day2EventId: raw.day2EventId ?? '',
   };
 }
 
 /**
  * The validated application configuration.
- * Exported for use by useResults.ts and any other module that needs
- * the backend base URL or event IDs.
+ * Exported for use by composables and any other module that needs
+ * the backend base URL.
  */
 export const appConfig: AppConfig = loadAppConfig();

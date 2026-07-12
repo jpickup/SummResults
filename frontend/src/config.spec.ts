@@ -5,8 +5,6 @@
  * must reset the module registry and re-import the module dynamically so the
  * validation logic runs fresh against the window.__APP_CONFIG__ value set for
  * that test.
- *
- * Validates: Requirements 6.4
  */
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -37,17 +35,21 @@ describe('config.ts', () => {
     await expect(import('./config')).rejects.toThrow('apiBaseUrl is not configured');
   });
 
-  it('returns correct config when fully populated', async () => {
+  it('returns correct config when apiBaseUrl is provided', async () => {
     window.__APP_CONFIG__ = {
       apiBaseUrl: 'http://localhost:8080',
-      day1EventId: 'Event1',
-      day2EventId: 'Event2',
     };
 
     const { appConfig } = await import('./config');
 
     expect(appConfig.apiBaseUrl).toBe('http://localhost:8080');
-    expect(appConfig.day1EventId).toBe('Event1');
-    expect(appConfig.day2EventId).toBe('Event2');
+  });
+
+  it('trims whitespace from apiBaseUrl', async () => {
+    window.__APP_CONFIG__ = { apiBaseUrl: '  http://localhost:8080  ' };
+
+    const { appConfig } = await import('./config');
+
+    expect(appConfig.apiBaseUrl).toBe('http://localhost:8080');
   });
 });

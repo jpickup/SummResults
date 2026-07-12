@@ -1,6 +1,6 @@
 package com.maprun.results.web;
 
-import com.maprun.results.model.ParticipantResult;
+import com.maprun.results.model.TeamResult;
 import com.maprun.results.service.ResultsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,13 +13,12 @@ import java.util.Map;
 /**
  * REST controller exposing the processed results endpoint.
  *
- * <p>Handles {@code GET /api/results?day1EventId={id}&day2EventId={id}}.
+ * <p>Handles {@code GET /api/results?eventId={id}}.
+ * The {@code eventId} must match a named event configured under {@code app.events}.
  * Missing parameters are caught by Spring MVC and delegated to
  * {@link GlobalExceptionHandler} which returns a 400 response.
  * Blank (present-but-empty) parameters are validated here before
  * delegating to {@link ResultsService}.</p>
- *
- * <p>Requirements 4.1, 4.2, 4.3.</p>
  */
 @RestController
 public class ResultsController {
@@ -31,28 +30,22 @@ public class ResultsController {
     }
 
     /**
-     * Returns a JSON array of processed {@link ParticipantResult} objects for the
-     * given two-day event.
+     * Returns a JSON array of {@link TeamResult} objects for the given named event,
+     * sorted descending by total score. Participants not assigned to any team appear
+     * as solo entries.
      *
-     * @param day1EventId the MapRun event ID for Day 1 (required, non-blank)
-     * @param day2EventId the MapRun event ID for Day 2 (required, non-blank)
-     * @return 200 with the sorted results list, or 400 if either ID is blank
+     * @param eventId the stable named-event ID (e.g. {@code "SUMM-2026"}), required and non-blank
+     * @return 200 with the sorted results list, 400 if {@code eventId} is blank, 404 if unknown
      */
     @GetMapping("/api/results")
-    public ResponseEntity<?> getResults(
-            @RequestParam String day1EventId,
-            @RequestParam String day2EventId) {
+    public ResponseEntity<?> getResults(@RequestParam String eventId) {
 
-        if (day1EventId.isBlank()) {
+        if (eventId.isBlank()) {
             return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Query parameter 'day1EventId' must not be blank."));
-        }
-        if (day2EventId.isBlank()) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Query parameter 'day2EventId' must not be blank."));
+                    .body(Map.of("error", "Query parameter 'eventId' must not be blank."));
         }
 
-        List<ParticipantResult> results = resultsService.getResults(day1EventId, day2EventId);
+        List<TeamResult> results = resultsService.getResults(eventId);
         return ResponseEntity.ok(results);
     }
 }

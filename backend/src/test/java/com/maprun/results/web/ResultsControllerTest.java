@@ -2,7 +2,7 @@ package com.maprun.results.web;
 
 import com.maprun.results.exception.MapRunEmptyBodyException;
 import com.maprun.results.exception.MapRunHttpErrorException;
-import com.maprun.results.model.ParticipantResult;
+import com.maprun.results.model.TeamResult;
 import com.maprun.results.service.ResultsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -22,9 +22,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * {@code @WebMvcTest} slice tests for {@link ResultsController}.
  *
- * <p>Validates Requirements 4.1–4.5: endpoint existence, missing-parameter
- * handling (400), empty-body upstream error (400), upstream HTTP error (502),
- * and successful 200 response shape.</p>
+ * <p>Validates endpoint existence, missing/blank parameter handling (400),
+ * empty-body upstream error (400), upstream HTTP error (502), and
+ * successful 200 response shape.</p>
  */
 @WebMvcTest(ResultsController.class)
 @Import(GlobalExceptionHandler.class)
@@ -37,76 +37,69 @@ class ResultsControllerTest {
     private ResultsService resultsService;
 
     // -----------------------------------------------------------------------
-    // Requirement 4.3 – missing query parameters → 400
+    // Missing query parameter → 400
     // -----------------------------------------------------------------------
 
     @Test
-    void returns400WhenDay1EventIdAbsent() throws Exception {
-        mockMvc.perform(get("/api/results").param("day2EventId", "456"))
+    void returns400WhenEventIdAbsent() throws Exception {
+        mockMvc.perform(get("/api/results"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").exists());
     }
 
     @Test
-    void returns400WhenDay2EventIdAbsent() throws Exception {
-        mockMvc.perform(get("/api/results").param("day1EventId", "123"))
+    void returns400WhenEventIdBlank() throws Exception {
+        mockMvc.perform(get("/api/results").param("eventId", "   "))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").exists());
     }
 
     // -----------------------------------------------------------------------
-    // Requirement 4.4 – empty body from upstream → 400
+    // Empty body from upstream → 400
     // -----------------------------------------------------------------------
 
     @Test
     void returns400WhenUpstreamReturnsEmptyBody() throws Exception {
-        when(resultsService.getResults(any(), any()))
+        when(resultsService.getResults(anyString()))
                 .thenThrow(new MapRunEmptyBodyException(1, "empty"));
 
-        mockMvc.perform(get("/api/results")
-                        .param("day1EventId", "123")
-                        .param("day2EventId", "456"))
+        mockMvc.perform(get("/api/results").param("eventId", "SUMM-2026"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").exists());
     }
 
     // -----------------------------------------------------------------------
-    // Requirement 4.5 – upstream HTTP error → 502
+    // Upstream HTTP error → 502
     // -----------------------------------------------------------------------
 
     @Test
     void returns502ForUpstreamHttpError() throws Exception {
-        when(resultsService.getResults(any(), any()))
+        when(resultsService.getResults(anyString()))
                 .thenThrow(new MapRunHttpErrorException(1, 503, "error"));
 
-        mockMvc.perform(get("/api/results")
-                        .param("day1EventId", "123")
-                        .param("day2EventId", "456"))
+        mockMvc.perform(get("/api/results").param("eventId", "SUMM-2026"))
                 .andExpect(status().isBadGateway())
                 .andExpect(jsonPath("$.error").exists());
     }
 
     // -----------------------------------------------------------------------
-    // Requirement 4.1 / 4.2 – successful request → 200 with correct JSON shape
+    // Successful request → 200 with correct JSON shape
     // -----------------------------------------------------------------------
 
     @Test
     void returns200WithCorrectJsonOnSuccess() throws Exception {
-        ParticipantResult participant = new ParticipantResult(
-                "Smith John",
-                List.of(),
-                100, 0, 100,
-                List.of(),
-                50, 0, 0, 50,
-                150
+        TeamResult team = new TeamResult(
+                "Smith & Jones",
+                List.of("Smith John", "Jones Alice"),
+                100,
+                80,
+                180
         );
-        when(resultsService.getResults(any(), any())).thenReturn(List.of(participant));
+        when(resultsService.getResults(anyString())).thenReturn(List.of(team));
 
-        mockMvc.perform(get("/api/results")
-                        .param("day1EventId", "123")
-                        .param("day2EventId", "456"))
+        mockMvc.perform(get("/api/results").param("eventId", "SUMM-2026"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].participantName").value("Smith John"))
-                .andExpect(jsonPath("$[0].totalScore").value(150));
+                .andExpect(jsonPath("$[0].teamName").value("Smith & Jones"))
+                .andExpect(jsonPath("$[0].totalScore").value(180));
     }
 }

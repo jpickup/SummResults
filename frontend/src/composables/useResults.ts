@@ -1,25 +1,24 @@
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-import type { AppConfig, ParticipantResult } from '../types';
+import type { TeamResult } from '../types';
 
 /**
- * Composable that fetches processed results from the backend API.
+ * Composable that fetches processed team results from the backend API for a
+ * single named event identified by its stable {@code eventId}.
  *
  * - Immediately triggers a fetch on creation (auto-fetch).
  * - Exposes loading/error/results state as reactive refs.
  * - Guards against stacked requests: refresh() is a no-op while a fetch
  *   is already in flight.
- *
- * Validates: Requirements 5.4, 5.6, 5.7
  */
-export function useResults(config: AppConfig): {
-  results: Ref<ParticipantResult[]>;
+export function useResults(apiBaseUrl: string, eventId: string): {
+  results: Ref<TeamResult[]>;
   loading: Ref<boolean>;
   error: Ref<string | null>;
   isRefreshing: Ref<boolean>;
   refresh: () => void;
 } {
-  const results = ref<ParticipantResult[]>([]);
+  const results = ref<TeamResult[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
 
@@ -35,10 +34,7 @@ export function useResults(config: AppConfig): {
     loading.value = true;
     error.value = null;
 
-    const url =
-      `${config.apiBaseUrl}/api/results` +
-      `?day1EventId=${encodeURIComponent(config.day1EventId)}` +
-      `&day2EventId=${encodeURIComponent(config.day2EventId)}`;
+    const url = `${apiBaseUrl}/api/results?eventId=${encodeURIComponent(eventId)}`;
 
     try {
       const response = await fetch(url);
@@ -49,7 +45,7 @@ export function useResults(config: AppConfig): {
         return;
       }
 
-      results.value = (await response.json()) as ParticipantResult[];
+      results.value = (await response.json()) as TeamResult[];
     } catch (err) {
       error.value = err instanceof Error ? err.message : String(err);
       results.value = [];
@@ -58,7 +54,7 @@ export function useResults(config: AppConfig): {
     }
   }
 
-  // Auto-fetch on composable creation (Requirement 5.4).
+  // Auto-fetch on composable creation.
   refresh();
 
   return { results, loading, error, isRefreshing, refresh };

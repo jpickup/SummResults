@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { AppConfig } from './types'
-import { useResults } from './composables/useResults'
-import ResultsTable from './components/ResultsTable.vue'
-import LoadingSpinner from './components/LoadingSpinner.vue'
-import ErrorMessage from './components/ErrorMessage.vue'
-import EmptyState from './components/EmptyState.vue'
+import type { AppConfig, NamedEvent } from './types'
+import { useEvents } from './composables/useEvents'
+import EventsList from './components/EventsList.vue'
+import ResultsPage from './components/ResultsPage.vue'
+import TeamsManager from './components/TeamsManager.vue'
+
+type View = 'events' | 'results' | 'teams'
 
 const configError = ref<string | null>(null)
 let appConfigVal: AppConfig | null = null
@@ -17,9 +18,31 @@ try {
   configError.value = e instanceof Error ? e.message : String(e)
 }
 
-const { results, loading, error, isRefreshing, refresh } = appConfigVal
-  ? useResults(appConfigVal)
-  : { results: ref([]), loading: ref(false), error: ref(null), isRefreshing: ref(false), refresh: () => {} }
+const { events, loading, error } = appConfigVal
+  ? useEvents(appConfigVal.apiBaseUrl)
+  : { events: ref<NamedEvent[]>([]), loading: ref(false), error: ref(null) }
+
+const view = ref<View>('events')
+const selectedEvent = ref<NamedEvent | null>(null)
+
+function selectEvent(eventId: string) {
+  selectedEvent.value = events.value.find(e => e.id === eventId) ?? null
+  if (selectedEvent.value) view.value = 'results'
+}
+
+function goToEvents() {
+  view.value = 'events'
+  selectedEvent.value = null
+}
+
+function goToTeams() {
+  view.value = 'teams'
+}
+
+function backFromTeams() {
+  // Return to results if we came from there, otherwise to the events list.
+  view.value = selectedEvent.value ? 'results' : 'events'
+}
 </script>
 
 <template>
@@ -28,12 +51,26 @@ const { results, loading, error, isRefreshing, refresh } = appConfigVal
       Configuration error: {{ configError }}
     </div>
     <template v-else>
-      <h1>MapRun Results</h1>
-      <button @click="refresh" :disabled="isRefreshing">Refresh</button>
-      <LoadingSpinner v-if="loading" />
-      <ErrorMessage v-else-if="error" :message="error" />
-      <EmptyState v-else-if="results.length === 0" />
-      <ResultsTable v-else :results="results" />
+      <TeamsManager
+        v-if="view === 'teams'"
+        :apiBaseUrl="appConfigVal!.apiBaseUrl"
+        @back="backFromTeams"
+      />
+      <ResultsPage
+        v-else-if="view === 'results' && selectedEvent"
+        :apiBaseUrl="appConfigVal!.apiBaseUrl"
+        :eventId="selectedEvent.id"
+        :eventName="selectedEvent.name"
+        @back="goToEvents"
+        @manageTeams="goToTeams"
+      />
+      <EventsList
+        v-else
+        :events="events"
+        :loading="loading"
+        :error="error"
+        @select="selectEvent"
+      />
     </template>
   </div>
 </template>

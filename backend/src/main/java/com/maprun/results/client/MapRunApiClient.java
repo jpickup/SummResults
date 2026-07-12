@@ -8,9 +8,10 @@ import com.maprun.results.exception.MapRunParseException;
 import com.maprun.results.exception.MapRunTimeoutException;
 import com.maprun.results.model.ControlVisit;
 import com.maprun.results.model.DayResult;
-import com.maprun.results.model.MapRunControlRaw;
 import com.maprun.results.model.MapRunParticipantRaw;
 import com.maprun.results.model.MapRunResultsResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,8 @@ import java.util.List;
  */
 @Component
 public class MapRunApiClient {
+
+    private static final Logger logger = LoggerFactory.getLogger(MapRunApiClient.class);
 
     private static final String BASE_URL =
             "https://p.fne.com.au:8886/resultsGetPublicForEventv2";
@@ -75,6 +78,7 @@ public class MapRunApiClient {
      * @throws MapRunMissingFieldsException  if required fields are absent in the parsed JSON
      */
     public List<DayResult> fetchDay(String eventName, int day) {
+        logger.info("MapRun API request: day={}, eventName={}", day, eventName);
         String body;
         try {
             body = restClient.get()
@@ -93,33 +97,49 @@ public class MapRunApiClient {
                             })
                     .body(String.class);
         } catch (MapRunHttpErrorException e) {
+            logger.info("MapRun API response: day={}, eventName={} → HTTP {}", day, eventName, e.getHttpStatus());
             throw e;
         } catch (ResourceAccessException e) {
+            logger.info("MapRun API response: day={}, eventName={} → timeout", day, eventName);
             throw new MapRunTimeoutException(day,
                     "Request to MapRun API timed out after " + (TIMEOUT_MS / 1000)
                             + " seconds for day " + day, e);
         }
 
         if (body == null || body.isBlank()) {
+            logger.info("MapRun API response: day={}, eventName={} → empty body", day, eventName);
             throw new MapRunEmptyBodyException(day,
                     "MapRun API returned an empty response body for day " + day
                             + " — event name may be invalid");
+        }
+
+        try {
+            Object parsed = objectMapper.readValue(body, Object.class);
+            logger.info("MapRun API response body: day={}, eventName={}\n{}",
+                    day, eventName, objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(parsed));
+        } catch (Exception ignored) {
+            // If pretty-printing fails for any reason, fall back to the raw body.
+            logger.info("MapRun API response body: day={}, eventName={}\n{}", day, eventName, body);
         }
 
         MapRunResultsResponse response;
         try {
             response = objectMapper.readValue(body, MapRunResultsResponse.class);
         } catch (Exception e) {
+            logger.info("MapRun API response: day={}, eventName={} → parse error: {}", day, eventName, e.getMessage());
             throw new MapRunParseException(day,
                     "Failed to parse MapRun API response for day " + day + ": " + e.getMessage(), e);
         }
 
         if (response.resultsList() == null) {
+            logger.info("MapRun API response: day={}, eventName={} → missing ResultsList field", day, eventName);
             throw new MapRunMissingFieldsException(day,
                     "MapRun API response for day " + day + " is missing the 'ResultsList' field");
         }
 
-        return toDayResults(response.resultsList(), day);
+        List<DayResult> results = toDayResults(response.resultsList(), day);
+        logger.info("MapRun API response: day={}, eventName={} → 200, {} participant(s)", day, eventName, results.size());
+        return results;
     }
 
     // -------------------------------------------------------------------------
@@ -130,21 +150,26 @@ public class MapRunApiClient {
         List<DayResult> results = new ArrayList<>(rawList.size());
         for (MapRunParticipantRaw raw : rawList) {
             validateParticipant(raw, day);
-            List<ControlVisit> controls = raw.scoreControls().stream()
-                    .map(c -> new ControlVisit(c.controlId(), c.points()))
+            String name = (raw.firstname() + " " + raw.surname()).trim();
+            // The real MapRun API does not provide per-control point values.
+            // Controls are mapped with points=0; the gross/net scores are used
+            // for all scoring calculations instead.
+            List<ControlVisit> controls = raw.punchControlIds().stream()
+                    .map(id -> new ControlVisit(id, 0))
                     .toList();
-            results.add(new DayResult(raw.name(), controls, raw.grossScore(), raw.penalty()));
+            int penalty = raw.grossScore() - raw.netScore();
+            results.add(new DayResult(name, controls, raw.grossScore(), penalty));
         }
         return results;
     }
 
     private void validateParticipant(MapRunParticipantRaw raw, int day) {
         List<String> missing = new ArrayList<>();
-        if (raw.name() == null || raw.name().isBlank()) {
-            missing.add("Name");
+        if (raw.surname() == null || raw.surname().isBlank()) {
+            missing.add("Surname");
         }
-        if (raw.scoreControls() == null) {
-            missing.add("ScoreControls");
+        if (raw.punchControlIds() == null) {
+            missing.add("punchControlIds");
         }
         if (!missing.isEmpty()) {
             throw new MapRunMissingFieldsException(day,

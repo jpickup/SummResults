@@ -3,7 +3,6 @@ com/maprun/results/service/ResultsService.class
 com/maprun/results/config/EventsConfig$EventEntry.class
 com/maprun/results/exception/MapRunTimeoutException.class
 com/maprun/results/model/TeamResult.class
-com/maprun/results/model/MapRunControlRaw.class
 com/maprun/results/teams/TeamsRepository.class
 com/maprun/results/model/NamedEvent.class
 com/maprun/results/teams/TeamsRepository$1.class

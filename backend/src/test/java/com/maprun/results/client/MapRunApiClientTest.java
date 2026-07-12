@@ -14,6 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.web.client.RestClient;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -56,48 +59,60 @@ class MapRunApiClientTest {
     }
 
     // -------------------------------------------------------------------------
+    // Helpers
+    // -------------------------------------------------------------------------
+
+    /** Loads a classpath resource as a UTF-8 string. */
+    private static String loadResource(String path) throws IOException {
+        try (InputStream is = MapRunApiClientTest.class.getClassLoader().getResourceAsStream(path)) {
+            if (is == null) throw new IOException("Resource not found: " + path);
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
+
+    // -------------------------------------------------------------------------
     // 1. Successful 200 response is parsed into correct DayResult list
     // -------------------------------------------------------------------------
 
     /**
      * Validates: Requirement 1.3 — 200 response parsed into Participant list
-     * with Controls, GrossScore, and Penalty for that day.
+     * with controls, GrossScore, and derived penalty for that day.
+     *
+     * <p>Assertions are grounded in the real fixture (maprun-response.json):
+     * <ul>
+     *   <li>12 participants total</li>
+     *   <li>First entry: John Pickup — GrossScore=1090, NetScore=1090 → penalty=0, 33 controls</li>
+     *   <li>Third entry: Dan Martyn — GrossScore=1000, NetScore=720 → penalty=280, 29 controls</li>
+     * </ul>
      */
     @Test
-    void successfulResponseIsParsedCorrectly() {
+    void successfulResponseIsParsedCorrectly() throws IOException {
         wireMock.stubFor(get(urlPathEqualTo("/"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("""
-                                {
-                                  "EventName": "Test Event",
-                                  "ResultsList": [
-                                    {
-                                      "Name": "Smith John",
-                                      "GrossScore": 420,
-                                      "Penalty": 0,
-                                      "ScoreControls": [
-                                        { "Control": "101", "Points": 30 },
-                                        { "Control": "102", "Points": 20 }
-                                      ]
-                                    }
-                                  ]
-                                }
-                                """)));
+                        .withBody(loadResource("maprun-response.json"))));
 
-        List<DayResult> results = client.fetchDay("Test Event", 1);
+        List<DayResult> results = client.fetchDay("SUMM Day 1 v2 ScoreP420", 1);
 
-        assertThat(results).hasSize(1);
-        DayResult result = results.get(0);
-        assertThat(result.participantName()).isEqualTo("Smith John");
-        assertThat(result.grossScore()).isEqualTo(420);
-        assertThat(result.penalty()).isEqualTo(0);
-        assertThat(result.controls()).hasSize(2);
-        assertThat(result.controls().get(0).controlId()).isEqualTo("101");
-        assertThat(result.controls().get(0).points()).isEqualTo(30);
-        assertThat(result.controls().get(1).controlId()).isEqualTo("102");
-        assertThat(result.controls().get(1).points()).isEqualTo(20);
+        assertThat(results).hasSize(12);
+
+        // First participant: John Pickup — no penalty, 33 controls
+        DayResult pickup = results.get(0);
+        assertThat(pickup.participantName()).isEqualTo("John Pickup");
+        assertThat(pickup.grossScore()).isEqualTo(1090);
+        assertThat(pickup.penalty()).isEqualTo(0);
+        assertThat(pickup.controls()).hasSize(33);
+        assertThat(pickup.controls().get(0).controlId()).isEqualTo("45");
+        // Per-control points are not provided by the API — always 0
+        assertThat(pickup.controls().get(0).points()).isEqualTo(0);
+
+        // Third participant: Dan Martyn — penalty = GrossScore(1000) - NetScore(720)
+        DayResult martyn = results.get(2);
+        assertThat(martyn.participantName()).isEqualTo("Dan Martyn");
+        assertThat(martyn.grossScore()).isEqualTo(1000);
+        assertThat(martyn.penalty()).isEqualTo(280);
+        assertThat(martyn.controls()).hasSize(29);
     }
 
     // -------------------------------------------------------------------------
@@ -197,17 +212,8 @@ class MapRunApiClientTest {
     // -------------------------------------------------------------------------
 
     /**
-     * Validates: Requirement 1.5 — 200 OK with a body that is valid JSON but
-     * does not match the expected schema triggers a parse error for the day.
-     *
-     * <p>Jackson will deserialise the unknown structure into a
-     * {@link com.maprun.results.model.MapRunResultsResponse} with a null
-     * {@code ResultsList}, which is then caught as a
-     * {@link MapRunMissingFieldsException}; however if the body cannot be
-     * deserialised at all (e.g. a plain string or truly malformed JSON) then
-     * a {@link MapRunParseException} is thrown. Both are acceptable for
-     * Requirement 1.5. This test verifies the "structurally invalid for the
-     * schema" path where the body is not even valid JSON.</p>
+     * Validates: Requirement 1.5 — body that is not valid JSON at all triggers
+     * a parse error identifying the affected day.
      */
     @Test
     void malformedJsonMapsToMapRunParseException() {
@@ -223,23 +229,62 @@ class MapRunApiClientTest {
     }
 
     // -------------------------------------------------------------------------
-    // 7. JSON missing ResultsList maps to MapRunMissingFieldsException
+    // 7. JSON missing results array maps to MapRunMissingFieldsException
     // -------------------------------------------------------------------------
 
     /**
      * Validates: Requirement 1.8 — 200 OK response with valid JSON that is
-     * missing the required {@code ResultsList} field triggers a missing-fields
+     * missing the required {@code results} array triggers a missing-fields
      * error identifying the affected day.
      */
     @Test
-    void missingRequiredFieldsMapsToMapRunMissingFieldsException() {
+    void missingResultsArrayMapsToMapRunMissingFieldsException() {
         wireMock.stubFor(get(urlPathEqualTo("/"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody("""
                                 {
-                                  "EventName": "Test Event"
+                                  "errorFlag": false,
+                                  "statusMessage": "",
+                                  "warningFlag": false,
+                                  "warningMessage": ""
+                                }
+                                """)));
+
+        assertThatThrownBy(() -> client.fetchDay("Test Event", 1))
+                .isInstanceOf(MapRunMissingFieldsException.class)
+                .satisfies(ex -> assertThat(((MapRunMissingFieldsException) ex).getDay()).isEqualTo(1));
+    }
+
+    // -------------------------------------------------------------------------
+    // 8. Participant entry missing Surname maps to MapRunMissingFieldsException
+    // -------------------------------------------------------------------------
+
+    /**
+     * Validates: Requirement 1.8 — a participant entry missing the required
+     * {@code Surname} field triggers a missing-fields error for that day.
+     */
+    @Test
+    void participantMissingSurnameMapsToMapRunMissingFieldsException() {
+        wireMock.stubFor(get(urlPathEqualTo("/"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("""
+                                {
+                                  "errorFlag": false,
+                                  "statusMessage": "",
+                                  "warningFlag": false,
+                                  "warningMessage": "",
+                                  "results": [
+                                    {
+                                      "Firstname": "John",
+                                      "GrossScore": 100,
+                                      "NetScore": 100,
+                                      "punchControlIds": ["10", "20"]
+                                    }
+                                  ]
                                 }
                                 """)));
 

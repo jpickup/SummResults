@@ -10,7 +10,6 @@
 /Users/john/Development/SummResults/backend/src/main/java/com/maprun/results/exception/MapRunTimeoutException.java
 /Users/john/Development/SummResults/backend/src/main/java/com/maprun/results/model/ControlVisit.java
 /Users/john/Development/SummResults/backend/src/main/java/com/maprun/results/model/DayResult.java
-/Users/john/Development/SummResults/backend/src/main/java/com/maprun/results/model/MapRunControlRaw.java
 /Users/john/Development/SummResults/backend/src/main/java/com/maprun/results/model/MapRunParticipantRaw.java
 /Users/john/Development/SummResults/backend/src/main/java/com/maprun/results/model/MapRunResultsResponse.java
 /Users/john/Development/SummResults/backend/src/main/java/com/maprun/results/model/NamedEvent.java

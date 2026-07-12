@@ -2,6 +2,8 @@ package com.maprun.results.web;
 
 import com.maprun.results.config.EventsConfig;
 import com.maprun.results.model.NamedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +21,8 @@ import java.util.List;
 @RestController
 public class EventsController {
 
+    private static final Logger logger = LoggerFactory.getLogger(EventsController.class);
+
     private final EventsConfig eventsConfig;
 
     public EventsController(EventsConfig eventsConfig) {
@@ -33,9 +37,11 @@ public class EventsController {
      */
     @GetMapping("/api/events")
     public ResponseEntity<List<EventSummary>> getEvents() {
+        logger.info("GET /api/events");
         List<EventSummary> summaries = eventsConfig.getEvents().stream()
                 .map(e -> new EventSummary(e.getId(), e.getName()))
                 .toList();
+        logger.info("GET /api/events → 200, {} event(s)", summaries.size());
         return ResponseEntity.ok(summaries);
     }
 

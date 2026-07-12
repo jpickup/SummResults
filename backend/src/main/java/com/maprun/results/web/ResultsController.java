@@ -2,6 +2,8 @@ package com.maprun.results.web;
 
 import com.maprun.results.model.TeamResult;
 import com.maprun.results.service.ResultsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +25,8 @@ import java.util.Map;
 @RestController
 public class ResultsController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ResultsController.class);
+
     private final ResultsService resultsService;
 
     public ResultsController(ResultsService resultsService) {
@@ -39,13 +43,16 @@ public class ResultsController {
      */
     @GetMapping("/api/results")
     public ResponseEntity<?> getResults(@RequestParam String eventId) {
+        logger.info("GET /api/results?eventId={}", eventId);
 
         if (eventId.isBlank()) {
+            logger.info("GET /api/results → 400, eventId is blank");
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "Query parameter 'eventId' must not be blank."));
         }
 
         List<TeamResult> results = resultsService.getResults(eventId);
+        logger.info("GET /api/results?eventId={} → 200, {} team result(s)", eventId, results.size());
         return ResponseEntity.ok(results);
     }
 }

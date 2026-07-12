@@ -1,5 +1,6 @@
 package com.maprun.results.web;
 
+import com.maprun.results.client.MapRunApiClient;
 import com.maprun.results.exception.MapRunEmptyBodyException;
 import com.maprun.results.exception.MapRunHttpErrorException;
 import com.maprun.results.model.TeamResult;
@@ -35,6 +36,12 @@ class ResultsControllerTest {
 
     @MockBean
     private ResultsService resultsService;
+
+    // Prevent the @WebMvcTest slice from trying to instantiate MapRunApiClient,
+    // which requires RestClient.Builder — not available in the MVC test slice.
+    @MockBean
+    @SuppressWarnings("unused")
+    private MapRunApiClient mapRunApiClient;
 
     // -----------------------------------------------------------------------
     // Missing query parameter → 400

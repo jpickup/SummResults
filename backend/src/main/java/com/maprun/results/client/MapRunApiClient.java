@@ -11,6 +11,7 @@ import com.maprun.results.model.DayResult;
 import com.maprun.results.model.MapRunControlRaw;
 import com.maprun.results.model.MapRunParticipantRaw;
 import com.maprun.results.model.MapRunResultsResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
@@ -37,6 +38,7 @@ public class MapRunApiClient {
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
 
+    @Autowired
     public MapRunApiClient(RestClient.Builder builder, ObjectMapper objectMapper) {
         this(builder, objectMapper, BASE_URL, TIMEOUT_MS);
     }

@@ -29,15 +29,12 @@ public class TeamsService {
     }
 
     /**
-     * Creates a new team, assigning a fresh UUID as its ID.
+     * Creates a new team from the given request, assigning a fresh UUID as its ID.
      *
-     * @param teamName user-defined team name (must be non-blank)
-     * @param member1  first competitor name (must be non-blank)
-     * @param member2  second competitor name, or {@code null} for a solo entry
      * @return the persisted team with its assigned ID
      */
-    public Team create(String teamName, String member1, String member2) {
-        Team team = new Team(UUID.randomUUID().toString(), teamName, member1, member2);
+    public Team create(TeamsController.TeamRequest req) {
+        Team team = toTeam(UUID.randomUUID().toString(), req);
         List<Team> teams = teamsRepository.findAll();
         teams.add(team);
         teamsRepository.saveAll(teams);
@@ -49,10 +46,10 @@ public class TeamsService {
      *
      * @throws ResponseStatusException 404 if no team with that ID exists
      */
-    public Team update(String id, String teamName, String member1, String member2) {
+    public Team update(String id, TeamsController.TeamRequest req) {
         List<Team> teams = teamsRepository.findAll();
         int idx = indexById(teams, id);
-        Team updated = new Team(id, teamName, member1, member2);
+        Team updated = toTeam(id, req);
         teams.set(idx, updated);
         teamsRepository.saveAll(teams);
         return updated;
@@ -71,6 +68,20 @@ public class TeamsService {
     }
 
     // -----------------------------------------------------------------------
+
+    private static Team toTeam(String id, TeamsController.TeamRequest req) {
+        boolean hasMember2 = req.member2() != null && !req.member2().isBlank();
+        return new Team(
+                id,
+                req.teamName(),
+                req.member1(),
+                req.member1Age(),
+                req.member1Gender() == null ? null : req.member1Gender().toUpperCase(),
+                hasMember2 ? req.member2()       : null,
+                hasMember2 ? req.member2Age()    : null,
+                hasMember2 ? (req.member2Gender() == null ? null : req.member2Gender().toUpperCase()) : null
+        );
+    }
 
     private int indexById(List<Team> teams, String id) {
         for (int i = 0; i < teams.size(); i++) {

@@ -17,6 +17,7 @@
 /Users/john/Development/java/SummResults/backend/src/main/java/com/maprun/results/model/ParticipantResult.java
 /Users/john/Development/java/SummResults/backend/src/main/java/com/maprun/results/model/Team.java
 /Users/john/Development/java/SummResults/backend/src/main/java/com/maprun/results/model/TeamResult.java
+/Users/john/Development/java/SummResults/backend/src/main/java/com/maprun/results/scoring/HandicapEngine.java
 /Users/john/Development/java/SummResults/backend/src/main/java/com/maprun/results/scoring/ScoringEngine.java
 /Users/john/Development/java/SummResults/backend/src/main/java/com/maprun/results/service/ResultsService.java
 /Users/john/Development/java/SummResults/backend/src/main/java/com/maprun/results/startup/AppStartupValidator.java

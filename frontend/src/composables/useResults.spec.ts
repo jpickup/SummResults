@@ -16,6 +16,8 @@ const SAMPLE_RESULT: TeamResult = {
   day1NetScore: 100,
   day2NetScore: 80,
   totalScore: 180,
+  handicapPct: 10,
+  handicapScore: 198,
 };
 
 beforeEach(() => {

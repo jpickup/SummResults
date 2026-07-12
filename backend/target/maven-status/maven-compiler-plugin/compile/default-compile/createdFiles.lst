@@ -21,6 +21,7 @@ com/maprun/results/exception/MapRunClientException.class
 com/maprun/results/startup/AppStartupValidator.class
 com/maprun/results/MapRunResultsApplication.class
 com/maprun/results/config/CorsConfig.class
+com/maprun/results/scoring/HandicapEngine.class
 com/maprun/results/client/MapRunApiClient.class
 com/maprun/results/model/MapRunParticipantRaw.class
 com/maprun/results/web/EventsController$EventSummary.class

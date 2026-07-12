@@ -3,12 +3,18 @@
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Team</th>
-          <th>Members</th>
+          <th rowspan="2">#</th>
+          <th rowspan="2">Team</th>
+          <th rowspan="2">Members</th>
+          <th colspan="3" class="group-header">Standard</th>
+          <th colspan="2" class="group-header handicap-group">Handicap</th>
+        </tr>
+        <tr>
           <th>D1 Net</th>
           <th>D2 Net</th>
           <th>Total</th>
+          <th class="handicap-col">H'cap %</th>
+          <th class="handicap-col">H'cap Score</th>
         </tr>
       </thead>
       <tbody>
@@ -16,9 +22,15 @@
           <td class="rank">{{ index + 1 }}</td>
           <td class="team-name">{{ result.teamName }}</td>
           <td class="members">{{ result.members.join(', ') }}</td>
-          <td>{{ result.day1NetScore }}</td>
-          <td>{{ result.day2NetScore }}</td>
-          <td class="total">{{ result.totalScore }}</td>
+          <td class="score">{{ result.day1NetScore }}</td>
+          <td class="score">{{ result.day2NetScore }}</td>
+          <td class="score total">{{ result.totalScore }}</td>
+          <td class="score handicap-col" :class="{ 'has-handicap': result.handicapPct > 0 }">
+            {{ result.handicapPct > 0 ? result.handicapPct + '%' : '—' }}
+          </td>
+          <td class="score handicap-col" :class="{ 'has-handicap': result.handicapPct > 0 }">
+            {{ result.handicapPct > 0 ? result.handicapScore : '—' }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -35,11 +47,19 @@ defineProps<{
 
 <style scoped>
 table { border-collapse: collapse; min-width: 100%; font-size: 0.9rem; }
-th, td { padding: 6px 10px; border: 1px solid #ccc; }
+th, td { padding: 5px 10px; border: 1px solid #ccc; }
 th { background: #f0f0f0; text-align: center; white-space: nowrap; }
 td { white-space: nowrap; }
-.rank { text-align: center; color: #666; width: 2.5rem; }
+
+.group-header { text-align: center; background: #e8e8e8; font-size: 0.78rem; letter-spacing: 0.03em; }
+.handicap-group { background: #e8f0fb; }
+
+.rank    { text-align: center; color: #666; width: 2.5rem; }
 .team-name { font-weight: 600; }
 .members { color: #555; font-size: 0.82rem; white-space: normal; }
-.total { font-weight: 700; text-align: right; }
+.score   { text-align: right; }
+.total   { font-weight: 700; }
+
+.handicap-col { background: #f3f7ff; }
+.has-handicap { background: #ddeeff; font-weight: 600; color: #1a4a8a; }
 </style>

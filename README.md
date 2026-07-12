@@ -18,3 +18,6 @@ SUMM Day 2 v2 ScoreP360
 
 Event site:
 https://www.trionium.com/SUMM/
+
+Handicap rules:
+If either team member is aged 45 or over then the team qualifies for a handicap. This is based on real ages. If a team does not qualify then the handicap is zero. The effective age of a team member is their real age if male or their real age plus 10 if female. Take the maximum effective age of the team and subtract 45 from this to get the handicap percentage. The handicap result of each team is their standard result increased by the handicap percentage.

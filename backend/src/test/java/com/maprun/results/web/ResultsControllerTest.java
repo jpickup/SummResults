@@ -93,7 +93,9 @@ class ResultsControllerTest {
                 List.of("Smith John", "Jones Alice"),
                 100,
                 80,
-                180
+                180,
+                10,
+                198
         );
         when(resultsService.getResults(anyString())).thenReturn(List.of(team));
 

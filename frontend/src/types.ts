@@ -37,28 +37,39 @@ export interface NamedEvent {
 
 /**
  * A team of one or two competitors, as returned by GET /api/teams.
- * member2 is absent for solo entries.
+ * Fields for member2 are absent for solo entries.
  */
 export interface Team {
   id: string;
   teamName: string;
   member1: string;
+  member1Age: number;
+  member1Gender: 'M' | 'F';
   member2?: string;
+  member2Age?: number;
+  member2Gender?: 'M' | 'F';
 }
 
 /**
  * Request body for POST /api/teams and PUT /api/teams/{id}.
+ * member2 fields are required when member2 is provided.
  */
 export interface TeamRequest {
   teamName: string;
   member1: string;
+  member1Age: number;
+  member1Gender: 'M' | 'F';
   member2?: string;
+  member2Age?: number;
+  member2Gender?: 'M' | 'F';
 }
 
 /**
  * Aggregated result for a team as returned by GET /api/results.
  * day1NetScore and day2NetScore are each the best (max) net score
  * among the team's members for that day.
+ * handicapPct is 0 for teams that do not qualify.
+ * handicapScore = round(totalScore * (1 + handicapPct / 100)).
  */
 export interface TeamResult {
   teamName: string;
@@ -66,6 +77,8 @@ export interface TeamResult {
   day1NetScore: number;
   day2NetScore: number;
   totalScore: number;
+  handicapPct: number;
+  handicapScore: number;
 }
 
 /**

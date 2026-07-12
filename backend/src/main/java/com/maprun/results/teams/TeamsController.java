@@ -28,9 +28,13 @@ import java.util.Map;
  * <p>Request body for POST and PUT:
  * <pre>
  * {
- *   "teamName": "Smith & Jones",
- *   "member1":  "Smith John",
- *   "member2":  "Jones Alice"   // omit or null for a solo entry
+ *   "teamName":      "Smith &amp; Jones",
+ *   "member1":       "Smith John",
+ *   "member1Age":    52,
+ *   "member1Gender": "M",
+ *   "member2":       "Jones Alice",   // omit or null for solo
+ *   "member2Age":    48,
+ *   "member2Gender": "F"
  * }
  * </pre>
  */
@@ -54,7 +58,7 @@ public class TeamsController {
         ResponseEntity<?> validation = validateBody(body);
         if (validation != null) return validation;
 
-        Team created = teamsService.create(body.teamName(), body.member1(), body.member2());
+        Team created = teamsService.create(body);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -66,7 +70,7 @@ public class TeamsController {
         ResponseEntity<?> validation = validateBody(body);
         if (validation != null) return validation;
 
-        Team updated = teamsService.update(id, body.teamName(), body.member1(), body.member2());
+        Team updated = teamsService.update(id, body);
         return ResponseEntity.ok(updated);
     }
 
@@ -87,15 +91,50 @@ public class TeamsController {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "'member1' must not be blank."));
         }
+        if (body.member1Age() == null || body.member1Age() < 0) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "'member1Age' must be a non-negative integer."));
+        }
+        if (!isValidGender(body.member1Gender())) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "'member1Gender' must be 'M' or 'F'."));
+        }
+        boolean hasMember2 = body.member2() != null && !body.member2().isBlank();
+        if (hasMember2) {
+            if (body.member2Age() == null || body.member2Age() < 0) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "'member2Age' must be a non-negative integer when member2 is provided."));
+            }
+            if (!isValidGender(body.member2Gender())) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "'member2Gender' must be 'M' or 'F' when member2 is provided."));
+            }
+        }
         return null;
+    }
+
+    private static boolean isValidGender(String g) {
+        return "M".equalsIgnoreCase(g) || "F".equalsIgnoreCase(g);
     }
 
     /**
      * JSON request body for create and update operations.
      *
-     * @param teamName user-defined team name
-     * @param member1  first competitor (required)
-     * @param member2  second competitor (optional, may be null or absent)
+     * @param teamName      user-defined team name (required)
+     * @param member1       first competitor MapRun name (required)
+     * @param member1Age    real age in whole years (required)
+     * @param member1Gender {@code "M"} or {@code "F"} (required)
+     * @param member2       second competitor name (optional)
+     * @param member2Age    real age of member 2 (required when member2 present)
+     * @param member2Gender gender of member 2 (required when member2 present)
      */
-    public record TeamRequest(String teamName, String member1, String member2) {}
+    public record TeamRequest(
+            String teamName,
+            String member1,
+            Integer member1Age,
+            String member1Gender,
+            String member2,
+            Integer member2Age,
+            String member2Gender
+    ) {}
 }

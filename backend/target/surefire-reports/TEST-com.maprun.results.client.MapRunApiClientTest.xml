@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.maprun.results.client.MapRunApiClientTest" time="2.148" tests="8" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.maprun.results.client.MapRunApiClientTest" time="2.075" tests="8" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -14,7 +14,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="GB"/>
     <property name="sun.boot.library.path" value="/Users/john/Library/Java/JavaVirtualMachines/openjdk-25.0.1/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/john/Development/SummResults/backend/target/surefire/surefirebooter-20260712163632209_3.jar /Users/john/Development/SummResults/backend/target/surefire 2026-07-12T16-36-32_166-jvmRun1 surefire-20260712163632209_1tmp surefire_0-20260712163632209_2tmp"/>
+    <property name="sun.java.command" value="/Users/john/Development/SummResults/backend/target/surefire/surefirebooter-20260712211149509_3.jar /Users/john/Development/SummResults/backend/target/surefire 2026-07-12T21-11-49_464-jvmRun1 surefire-20260712211149509_1tmp surefire_0-20260712211149509_2tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/john/Development/SummResults/backend/target/test-classes:/Users/john/Development/SummResults/backend/target/classes:/Users/john/.m2/repository/org/springframework/boot/spring-boot-starter-web/3.3.5/spring-boot-starter-web-3.3.5.jar:/Users/john/.m2/repository/org/springframework/boot/spring-boot-starter/3.3.5/spring-boot-starter-3.3.5.jar:/Users/john/.m2/repository/org/springframework/boot/spring-boot/3.3.5/spring-boot-3.3.5.jar:/Users/john/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.3.5/spring-boot-autoconfigure-3.3.5.jar:/Users/john/.m2/repository/org/springframework/boot/spring-boot-starter-logging/3.3.5/spring-boot-starter-logging-3.3.5.jar:/Users/john/.m2/repository/ch/qos/logback/logback-classic/1.5.11/logback-classic-1.5.11.jar:/Users/john/.m2/repository/ch/qos/logback/logback-core/1.5.11/logback-core-1.5.11.jar:/Users/john/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.23.1/log4j-to-slf4j-2.23.1.jar:/Users/john/.m2/repository/org/apache/logging/log4j/log4j-api/2.23.1/log4j-api-2.23.1.jar:/Users/john/.m2/repository/org/slf4j/jul-to-slf4j/2.0.16/jul-to-slf4j-2.0.16.jar:/Users/john/.m2/repository/jakarta/annotation/jakarta.annotation-api/2.1.1/jakarta.annotation-api-2.1.1.jar:/Users/john/.m2/repository/org/yaml/snakeyaml/2.2/snakeyaml-2.2.jar:/Users/john/.m2/repository/org/springframework/boot/spring-boot-starter-json/3.3.5/spring-boot-starter-json-3.3.5.jar:/Users/john/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.17.2/jackson-databind-2.17.2.jar:/Users/john/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.17.2/jackson-annotations-2.17.2.jar:/Users/john/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.17.2/jackson-core-2.17.2.jar:/Users/john/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.17.2/jackson-datatype-jdk8-2.17.2.jar:/Users/john/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.17.2/jackson-datatype-jsr310-2.17.2.jar:/Users/john/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.17.2/jackson-module-parameter-names-2.17.2.jar:/Users/john/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/3.3.5/spring-boot-starter-tomcat-3.3.5.jar:/Users/john/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.31/tomcat-embed-core-10.1.31.jar:/Users/john/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/10.1.31/tomcat-embed-el-10.1.31.jar:/Users/john/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/10.1.31/tomcat-embed-websocket-10.1.31.jar:/Users/john/.m2/repository/org/springframework/spring-web/6.1.14/spring-web-6.1.14.jar:/Users/john/.m2/repository/org/springframework/spring-beans/6.1.14/spring-beans-6.1.14.jar:/Users/john/.m2/repository/io/micrometer/micrometer-observation/1.13.6/micrometer-observation-1.13.6.jar:/Users/john/.m2/repository/io/micrometer/micrometer-commons/1.13.6/micrometer-commons-1.13.6.jar:/Users/john/.m2/repository/org/springframework/spring-webmvc/6.1.14/spring-webmvc-6.1.14.jar:/Users/john/.m2/repository/org/springframework/spring-aop/6.1.14/spring-aop-6.1.14.jar:/Users/john/.m2/repository/org/springframework/spring-context/6.1.14/spring-context-6.1.14.jar:/Users/john/.m2/repository/org/springframework/spring-expression/6.1.14/spring-expression-6.1.14.jar:/Users/john/.m2/repository/org/springframework/boot/spring-boot-starter-test/3.3.5/spring-boot-starter-test-3.3.5.jar:/Users/john/.m2/repository/org/springframework/boot/spring-boot-test/3.3.5/spring-boot-test-3.3.5.jar:/Users/john/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/3.3.5/spring-boot-test-autoconfigure-3.3.5.jar:/Users/john/.m2/repository/com/jayway/jsonpath/json-path/2.9.0/json-path-2.9.0.jar:/Users/john/.m2/repository/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar:/Users/john/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.2/jakarta.xml.bind-api-4.0.2.jar:/Users/john/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.3/jakarta.activation-api-2.1.3.jar:/Users/john/.m2/repository/net/minidev/json-smart/2.5.1/json-smart-2.5.1.jar:/Users/john/.m2/repository/net/minidev/accessors-smart/2.5.1/accessors-smart-2.5.1.jar:/Users/john/.m2/repository/org/ow2/asm/asm/9.6/asm-9.6.jar:/Users/john/.m2/repository/org/assertj/assertj-core/3.25.3/assertj-core-3.25.3.jar:/Users/john/.m2/repository/net/bytebuddy/byte-buddy/1.14.19/byte-buddy-1.14.19.jar:/Users/john/.m2/repository/org/awaitility/awaitility/4.2.2/awaitility-4.2.2.jar:/Users/john/.m2/repository/org/hamcrest/hamcrest/2.2/hamcrest-2.2.jar:/Users/john/.m2/repository/org/junit/jupiter/junit-jupiter/5.10.5/junit-jupiter-5.10.5.jar:/Users/john/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.5/junit-jupiter-api-5.10.5.jar:/Users/john/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.5/junit-jupiter-params-5.10.5.jar:/Users/john/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.5/junit-jupiter-engine-5.10.5.jar:/Users/john/.m2/repository/org/mockito/mockito-core/5.11.0/mockito-core-5.11.0.jar:/Users/john/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.19/byte-buddy-agent-1.14.19.jar:/Users/john/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/john/.m2/repository/org/mockito/mockito-junit-jupiter/5.11.0/mockito-junit-jupiter-5.11.0.jar:/Users/john/.m2/repository/org/skyscreamer/jsonassert/1.5.3/jsonassert-1.5.3.jar:/Users/john/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/Users/john/.m2/repository/org/springframework/spring-core/6.1.14/spring-core-6.1.14.jar:/Users/john/.m2/repository/org/springframework/spring-jcl/6.1.14/spring-jcl-6.1.14.jar:/Users/john/.m2/repository/org/springframework/spring-test/6.1.14/spring-test-6.1.14.jar:/Users/john/.m2/repository/org/xmlunit/xmlunit-core/2.9.1/xmlunit-core-2.9.1.jar:/Users/john/.m2/repository/net/jqwik/jqwik/1.9.1/jqwik-1.9.1.jar:/Users/john/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/john/.m2/repository/net/jqwik/jqwik-api/1.9.1/jqwik-api-1.9.1.jar:/Users/john/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/john/.m2/repository/org/junit/platform/junit-platform-commons/1.10.5/junit-platform-commons-1.10.5.jar:/Users/john/.m2/repository/net/jqwik/jqwik-web/1.9.1/jqwik-web-1.9.1.jar:/Users/john/.m2/repository/net/jqwik/jqwik-time/1.9.1/jqwik-time-1.9.1.jar:/Users/john/.m2/repository/net/jqwik/jqwik-engine/1.9.1/jqwik-engine-1.9.1.jar:/Users/john/.m2/repository/org/junit/platform/junit-platform-engine/1.10.5/junit-platform-engine-1.10.5.jar:/Users/john/.m2/repository/org/wiremock/wiremock-standalone/3.9.2/wiremock-standalone-3.9.2.jar:"/>
@@ -33,7 +33,7 @@
     <property name="FILE_LOG_CHARSET" value="UTF-8"/>
     <property name="java.awt.headless" value="true"/>
     <property name="apple.awt.application.name" value="ForkedBooter"/>
-    <property name="surefire.real.class.path" value="/Users/john/Development/SummResults/backend/target/surefire/surefirebooter-20260712163632209_3.jar"/>
+    <property name="surefire.real.class.path" value="/Users/john/Development/SummResults/backend/target/surefire/surefirebooter-20260712211149509_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="25.0.1+8-27"/>
@@ -54,7 +54,7 @@
     <property name="user.dir" value="/Users/john/Development/SummResults/backend"/>
     <property name="os.arch" value="aarch64"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="PID" value="35328"/>
+    <property name="PID" value="64080"/>
     <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
     <property name="native.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/Users/john/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
@@ -68,326 +68,12 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="69.0"/>
   </properties>
-  <testcase name="malformedJsonMapsToMapRunParseException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.179">
-    <system-out><![CDATA[2026-07-12T16:36:34.186+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API request: day=1, eventName=Test Event
-2026-07-12T16:36:34.317+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API response body: day=1, eventName=Test Event
-this is not json at all { broken }
-2026-07-12T16:36:34.318+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API response: day=1, eventName=Test Event → parse error: Unrecognized token 'this': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
- at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 5]
-]]></system-out>
-  </testcase>
-  <testcase name="http5xxMapsToMapRunHttpErrorException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.007">
-    <system-out><![CDATA[2026-07-12T16:36:34.323+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API request: day=2, eventName=Test Event
-2026-07-12T16:36:34.328+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API response: day=2, eventName=Test Event → HTTP 503
-]]></system-out>
-  </testcase>
-  <testcase name="emptyBodyMapsToMapRunEmptyBodyException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.007">
-    <system-out><![CDATA[2026-07-12T16:36:34.332+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API request: day=1, eventName=Test Event
-2026-07-12T16:36:34.336+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API response: day=1, eventName=Test Event → empty body
-]]></system-out>
-  </testcase>
-  <testcase name="http4xxMapsToMapRunHttpErrorException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.004">
-    <system-out><![CDATA[2026-07-12T16:36:34.339+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API request: day=1, eventName=Unknown Event
-2026-07-12T16:36:34.341+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API response: day=1, eventName=Unknown Event → HTTP 404
-]]></system-out>
-  </testcase>
-  <testcase name="missingResultsArrayMapsToMapRunMissingFieldsException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.025">
-    <system-out><![CDATA[2026-07-12T16:36:34.343+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API request: day=1, eventName=Test Event
-2026-07-12T16:36:34.352+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API response body: day=1, eventName=Test Event
-{
-  "errorFlag" : false,
-  "statusMessage" : "",
-  "warningFlag" : false,
-  "warningMessage" : ""
-}
-2026-07-12T16:36:34.367+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API response: day=1, eventName=Test Event → missing ResultsList field
-]]></system-out>
-  </testcase>
-  <testcase name="participantMissingSurnameMapsToMapRunMissingFieldsException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.007">
-    <system-out><![CDATA[2026-07-12T16:36:34.369+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API request: day=1, eventName=Test Event
-2026-07-12T16:36:34.372+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API response body: day=1, eventName=Test Event
-{
-  "errorFlag" : false,
-  "statusMessage" : "",
-  "warningFlag" : false,
-  "warningMessage" : "",
-  "results" : [ {
-    "Firstname" : "John",
-    "GrossScore" : 100,
-    "NetScore" : 100,
-    "punchControlIds" : [ "10", "20" ]
-  } ]
-}
-]]></system-out>
-  </testcase>
-  <testcase name="timeoutMapsToMapRunTimeoutException" classname="com.maprun.results.client.MapRunApiClientTest" time="1.012">
-    <system-out><![CDATA[2026-07-12T16:36:34.377+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API request: day=1, eventName=Test Event
-2026-07-12T16:36:35.386+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API response: day=1, eventName=Test Event → timeout
-]]></system-out>
-  </testcase>
-  <testcase name="successfulResponseIsParsedCorrectly" classname="com.maprun.results.client.MapRunApiClientTest" time="0.025">
-    <system-out><![CDATA[2026-07-12T16:36:35.392+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API request: day=1, eventName=SUMM Day 1 v2 ScoreP420
-2026-07-12T16:36:35.409+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API response body: day=1, eventName=SUMM Day 1 v2 ScoreP420
-{
-  "errorFlag" : false,
-  "statusMessage" : "",
-  "warningFlag" : true,
-  "warningMessage" : "Multiple events found ... There should be only one.",
-  "results" : [ {
-    "Id" : 595685,
-    "Surname" : "Pickup",
-    "Firstname" : "John",
-    "Gender" : "M",
-    "YearOfBirth" : 1969,
-    "TrackStartDateTimeUTC" : "2026-05-09T07:27:05.000Z",
-    "StartPunchTimeLocal" : "00:00:00",
-    "FinishPunchTimeLocal" : "06:51:06",
-    "TotalTimehhmmss" : "6:51:06",
-    "TotalTimeSecs" : 24666,
-    "Classifier" : "OK",
-    "ClubName" : "MV",
-    "GrossScore" : 1090,
-    "NetScore" : 1090,
-    "MapRunVersion" : "MapRun 7.10.7 MapRun  on 3907-android-en",
-    "Distance" : 44.43,
-    "Pacemmss" : "9:15",
-    "PaceMins" : 9.252757146072472,
-    "punchControlIds" : [ "45", "46", "47", "53", "30", "20", "21", "52", "54", "31", "41", "10", "22", "32", "40", "57", "58", "59", "55", "18", "15", "29", "35", "34", "12", "25", "36", "50", "43", "51", "37", "27", "38" ],
-    "punchTimeAfterStartSecs" : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-  }, {
-    "Id" : 595550,
-    "Surname" : "Simpson",
-    "Firstname" : "Mark",
-    "Gender" : "M",
-    "YearOfBirth" : 1979,
-    "TrackStartDateTimeUTC" : "2026-05-09T07:28:10.000Z",
-    "StartPunchTimeLocal" : "10:00:39",
-    "FinishPunchTimeLocal" : "16:51:45",
-    "TotalTimehhmmss" : "6:51:06",
-    "TotalTimeSecs" : 24666,
-    "Classifier" : "OK",
-    "ClubName" : "SHRC",
-    "GrossScore" : 1090,
-    "NetScore" : 1090,
-    "MapRunVersion" : "MapRun 7.10.7 MapRun v1.10.0 on 3907-android-en",
-    "Distance" : 46.3,
-    "Pacemmss" : "8:53",
-    "PaceMins" : 8.879049676025918,
-    "punchControlIds" : [ "45", "46", "47", "53", "30", "20", "21", "52", "54", "31", "41", "10", "22", "32", "40", "57", "58", "59", "55", "18", "15", "29", "35", "34", "12", "25", "36", "50", "43", "51", "37", "27", "38" ],
-    "punchTimeAfterStartSecs" : [ 1012, 1376, 1893, 2542, 3153, 3556, 4095, 4662, 5128, 5754, 7024, 7765, 8918, 9947, 10486, 11097, 12094, 13282, 14253, 15784, 16228, 16699, 17188, 17507, 18164, 19164, 19613, 20014, 20939, 21466, 22636, 23931, 24363 ]
-  }, {
-    "Id" : 595568,
-    "Surname" : "Martyn",
-    "Firstname" : "Dan",
-    "Gender" : "M",
-    "YearOfBirth" : 1981,
-    "TrackStartDateTimeUTC" : "2026-05-09T09:23:02.000Z",
-    "StartPunchTimeLocal" : "10:00:40",
-    "FinishPunchTimeLocal" : "17:28:22",
-    "TotalTimehhmmss" : "7:27:42",
-    "TotalTimeSecs" : 26862,
-    "Classifier" : "OK",
-    "ClubName" : "",
-    "GrossScore" : 1000,
-    "NetScore" : 720,
-    "MapRunVersion" : "MapRun 7.11.4 MapRun v1.10.0 on 4536-ios-en",
-    "Distance" : 48.08,
-    "Pacemmss" : "9:19",
-    "PaceMins" : 9.311564059900167,
-    "punchControlIds" : [ "45", "46", "47", "53", "30", "20", "21", "52", "54", "31", "41", "23", "33", "50", "43", "51", "37", "26", "14", "36", "25", "12", "34", "57", "58", "59", "55", "27", "38" ],
-    "punchTimeAfterStartSecs" : [ 982, 1371, 1929, 2656, 3151, 3567, 4125, 4699, 5506, 6121, 7278, 10325, 11236, 12520, 13379, 13908, 14968, 15668, 16294, 16644, 17987, 18910, 19572, 20246, 21284, 23162, 24666, 25449, 25852 ]
-  }, {
-    "Id" : 595551,
-    "Surname" : "Morgan",
-    "Firstname" : "Philip",
-    "Gender" : "M",
-    "YearOfBirth" : 1971,
-    "TrackStartDateTimeUTC" : "2026-05-09T07:37:24.000Z",
-    "StartPunchTimeLocal" : "10:00:34",
-    "FinishPunchTimeLocal" : "16:39:19",
-    "TotalTimehhmmss" : "6:38:45",
-    "TotalTimeSecs" : 23925,
-    "Classifier" : "OK",
-    "ClubName" : "MVOC",
-    "GrossScore" : 850,
-    "NetScore" : 850,
-    "MapRunVersion" : "MapRun 7.10.7 MapRun v1.10.0 on 3888-android-en",
-    "Distance" : 34.95,
-    "Pacemmss" : "11:25",
-    "PaceMins" : 11.409155937052933,
-    "punchControlIds" : [ "45", "46", "47", "53", "30", "20", "21", "52", "54", "31", "41", "42", "23", "33", "25", "36", "50", "43", "51", "37", "26", "18", "55", "27", "38" ],
-    "punchTimeAfterStartSecs" : [ 1219, 1654, 2285, 3041, 3611, 4185, 4805, 5512, 6204, 6845, 8229, 9848, 10972, 11876, 13040, 13554, 14084, 15290, 15957, 17515, 18520, 20212, 21478, 22794, 23378 ]
-  }, {
-    "Id" : 595548,
-    "Surname" : "Davis",
-    "Firstname" : "M",
-    "Gender" : "M",
-    "YearOfBirth" : 1978,
-    "TrackStartDateTimeUTC" : "2026-05-09T00:00:34.000Z",
-    "StartPunchTimeLocal" : "10:00:35",
-    "FinishPunchTimeLocal" : "16:24:34",
-    "TotalTimehhmmss" : "6:23:58",
-    "TotalTimeSecs" : 23038,
-    "Classifier" : "OK",
-    "ClubName" : "",
-    "GrossScore" : 790,
-    "NetScore" : 790,
-    "MapRunVersion" : "MapRun 7.11.4-ios-en",
-    "Distance" : 34.65,
-    "Pacemmss" : "11:05",
-    "PaceMins" : 11.081289081289082,
-    "punchControlIds" : [ "47", "53", "30", "20", "46", "45", "44", "32", "40", "57", "34", "35", "58", "59", "55", "18", "26", "43", "51", "37", "27", "38" ],
-    "punchTimeAfterStartSecs" : [ 2505, 3241, 3743, 4187, 5219, 5789, 7047, 8051, 8771, 9635, 10882, 11302, 12643, 14067, 15263, 16927, 18096, 18884, 19426, 20607, 21973, 22587 ]
-  }, {
-    "Id" : 595547,
-    "Surname" : "Green",
-    "Firstname" : "Jonathan",
-    "Gender" : "M",
-    "YearOfBirth" : 1968,
-    "TrackStartDateTimeUTC" : "2026-05-09T07:22:07.000Z",
-    "StartPunchTimeLocal" : "10:00:38",
-    "FinishPunchTimeLocal" : "16:39:16",
-    "TotalTimehhmmss" : "6:38:38",
-    "TotalTimeSecs" : 23918,
-    "Classifier" : "OK",
-    "ClubName" : "Map & Nap",
-    "GrossScore" : 910,
-    "NetScore" : 910,
-    "MapRunVersion" : "MapRun 7.11.4 MapRun v1.10.0 on 3943-ios-en",
-    "Distance" : 41.6,
-    "Pacemmss" : "9:35",
-    "PaceMins" : 9.582532051282051,
-    "punchControlIds" : [ "45", "46", "47", "53", "30", "20", "21", "52", "31", "54", "41", "42", "17", "16", "24", "40", "32", "57", "34", "35", "58", "59", "55", "18", "37", "27", "38", "31 (Extra)" ],
-    "punchTimeAfterStartSecs" : [ 1241, 1673, 2232, 3225, 3746, 4177, 4775, 5410, 5919, 6568, 8486, 10201, 11257, 12034, 12625, 13271, 13859, 15322, 16213, 16673, 17874, 18965, 19894, 20726, 21658, 22766, 23237, 7181 ]
-  }, {
-    "Id" : 595546,
-    "Surname" : "Beale",
-    "Firstname" : "Bobby",
-    "Gender" : "M",
-    "YearOfBirth" : 1978,
-    "TrackStartDateTimeUTC" : "2026-05-09T07:17:58.000Z",
-    "StartPunchTimeLocal" : "09:59:40",
-    "FinishPunchTimeLocal" : "16:51:46",
-    "TotalTimehhmmss" : "6:52:06",
-    "TotalTimeSecs" : 24726,
-    "Classifier" : "OK",
-    "ClubName" : "",
-    "GrossScore" : 1050,
-    "NetScore" : 1050,
-    "MapRunVersion" : "MapRun 7.10.7 MapRun v1.10.0 on 4024-android-en",
-    "Distance" : 48.74,
-    "Pacemmss" : "8:27",
-    "PaceMins" : 8.455067706196143,
-    "punchControlIds" : [ "45", "46", "47", "53", "30", "20", "21", "52", "54", "31", "41", "10", "22", "13", "32", "40", "57", "34", "24", "16", "17", "42", "23", "25", "36", "50", "43", "51", "26", "14", "15", "29", "55", "27", "38" ],
-    "punchTimeAfterStartSecs" : [ 1009, 1371, 1913, 2546, 2941, 3387, 3907, 4434, 5472, 5937, 6888, 7514, 8431, 8870, 9318, 10109, 10707, 11501, 11892, 12270, 12913, 13860, 14417, 15338, 15856, 16242, 17088, 17524, 19269, 19819, 20286, 20944, 23294, 23994, 24415 ]
-  }, {
-    "Id" : 595545,
-    "Surname" : "Toogood",
-    "Firstname" : "Ben",
-    "Gender" : "M",
-    "YearOfBirth" : 1988,
-    "TrackStartDateTimeUTC" : "2026-05-09T07:17:23.000Z",
-    "StartPunchTimeLocal" : "10:00:39",
-    "FinishPunchTimeLocal" : "16:39:16",
-    "TotalTimehhmmss" : "6:38:37",
-    "TotalTimeSecs" : 23917,
-    "Classifier" : "OK",
-    "ClubName" : "MV",
-    "GrossScore" : 990,
-    "NetScore" : 990,
-    "MapRunVersion" : "MapRun 7.11.4 MapRun v1.10.0 on 3589-ios-en",
-    "Distance" : 38.3,
-    "Pacemmss" : "10:24",
-    "PaceMins" : 10.407745865970409,
-    "punchControlIds" : [ "45", "46", "47", "53", "30", "20", "21", "52", "31", "54", "41", "42", "23", "33", "36", "50", "51", "43", "26", "14", "15", "29", "35", "34", "58", "59", "55", "27", "38", "31 (Extra)" ],
-    "punchTimeAfterStartSecs" : [ 1251, 1764, 2551, 3292, 3783, 4213, 4875, 5681, 6191, 6858, 8946, 9946, 10922, 11700, 12694, 13078, 14365, 14844, 16015, 16665, 17326, 17842, 18519, 18929, 20064, 21073, 22178, 22935, 23473, 7490 ]
-  }, {
-    "Id" : 595543,
-    "Surname" : "McCaffrey",
-    "Firstname" : "Robert",
-    "Gender" : "M",
-    "YearOfBirth" : 1967,
-    "TrackStartDateTimeUTC" : "2026-05-09T00:03:19.000Z",
-    "StartPunchTimeLocal" : "10:03:23",
-    "FinishPunchTimeLocal" : "16:51:47",
-    "TotalTimehhmmss" : "6:48:24",
-    "TotalTimeSecs" : 24504,
-    "Classifier" : "OK",
-    "ClubName" : "MVOC",
-    "GrossScore" : 760,
-    "NetScore" : 760,
-    "MapRunVersion" : "MapRun 7.11.4-ios-en",
-    "Distance" : 37.47,
-    "Pacemmss" : "10:54",
-    "PaceMins" : 10.899386175607154,
-    "punchControlIds" : [ "45", "46", "47", "53", "30", "20", "21", "31", "52", "41", "23", "33", "25", "36", "50", "43", "51", "37", "26", "18", "55", "27", "38" ],
-    "punchTimeAfterStartSecs" : [ 1165, 1829, 2469, 3517, 4038, 4519, 5184, 6059, 6579, 10166, 12537, 13327, 14674, 15244, 15696, 16875, 17439, 18828, 20768, 22169, 23072, 23827, 24201 ]
-  }, {
-    "Id" : 595540,
-    "Surname" : "Morgan",
-    "Firstname" : "Jane",
-    "Gender" : "F",
-    "YearOfBirth" : 1968,
-    "TrackStartDateTimeUTC" : "2026-05-09T06:46:47.000Z",
-    "StartPunchTimeLocal" : "10:00:38",
-    "FinishPunchTimeLocal" : "16:39:20",
-    "TotalTimehhmmss" : "6:38:42",
-    "TotalTimeSecs" : 23922,
-    "Classifier" : "OK",
-    "ClubName" : "Summit Happens",
-    "GrossScore" : 870,
-    "NetScore" : 870,
-    "MapRunVersion" : "MapRun 7.11.4 MapRun v1.10.0 on 3288-ios-en",
-    "Distance" : 38.51,
-    "Pacemmss" : "10:21",
-    "PaceMins" : 10.353155024668917,
-    "punchControlIds" : [ "45", "46", "47", "53", "30", "20", "21", "52", "54", "31", "41", "42", "17", "23", "33", "25", "14", "36", "50", "43", "51", "37", "26", "18", "55", "27", "38" ],
-    "punchTimeAfterStartSecs" : [ 1241, 1658, 2291, 3146, 3861, 4291, 5014, 5611, 6228, 7003, 8147, 10242, 10891, 11731, 12542, 13451, 14383, 14872, 15355, 16222, 16805, 18175, 19128, 20337, 21129, 22494, 23246 ]
-  }, {
-    "Id" : 595538,
-    "Surname" : "Davies",
-    "Firstname" : "Tom",
-    "Gender" : "M",
-    "YearOfBirth" : 1978,
-    "TrackStartDateTimeUTC" : "2026-05-09T06:26:29.000Z",
-    "StartPunchTimeLocal" : "00:00:00",
-    "FinishPunchTimeLocal" : "00:00:00",
-    "TotalTimehhmmss" : "00:00",
-    "TotalTimeSecs" : 0,
-    "Classifier" : "--",
-    "ClubName" : "SLOW",
-    "GrossScore" : 0,
-    "NetScore" : 0,
-    "MapRunVersion" : "MapRun 7.9.0 MapRun v1.10.0 on 3943-ios-en",
-    "Distance" : 42.75,
-    "Pacemmss" : "0:00",
-    "PaceMins" : 0.0,
-    "punchControlIds" : [ ],
-    "punchTimeAfterStartSecs" : [ ]
-  }, {
-    "Id" : 595537,
-    "Surname" : "Winter",
-    "Firstname" : "Guy",
-    "Gender" : "M",
-    "YearOfBirth" : 1972,
-    "TrackStartDateTimeUTC" : "2026-05-09T00:00:25.000Z",
-    "StartPunchTimeLocal" : "10:00:28",
-    "FinishPunchTimeLocal" : "16:23:12",
-    "TotalTimehhmmss" : "6:22:43",
-    "TotalTimeSecs" : 22963,
-    "Classifier" : "OK",
-    "ClubName" : "Ditton Dawdlers",
-    "GrossScore" : 690,
-    "NetScore" : 690,
-    "MapRunVersion" : "MapRun 7.11.4-ios-en",
-    "Distance" : 40.82,
-    "Pacemmss" : "9:23",
-    "PaceMins" : 9.375714519026621,
-    "punchControlIds" : [ "45", "46", "22", "13", "32", "40", "24", "16", "11", "12", "34", "35", "29", "15", "14", "36", "50", "43", "51", "37", "18", "55", "59", "27", "38" ],
-    "punchTimeAfterStartSecs" : [ 1085, 1453, 2079, 2728, 3285, 4055, 4797, 5339, 5923, 6455, 7629, 7901, 8623, 9171, 9785, 10454, 11115, 11903, 12560, 14252, 15608, 16460, 19477, 21486, 22394 ]
-  } ]
-}
-2026-07-12T16:36:35.414+01:00  INFO 35328 --- [           main] c.maprun.results.client.MapRunApiClient  : MapRun API response: day=1, eventName=SUMM Day 1 v2 ScoreP420 → 200, 12 participant(s)
-]]></system-out>
-  </testcase>
+  <testcase name="malformedJsonMapsToMapRunParseException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.112"/>
+  <testcase name="http5xxMapsToMapRunHttpErrorException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.005"/>
+  <testcase name="emptyBodyMapsToMapRunEmptyBodyException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.003"/>
+  <testcase name="http4xxMapsToMapRunHttpErrorException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.003"/>
+  <testcase name="missingResultsArrayMapsToMapRunMissingFieldsException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.02"/>
+  <testcase name="participantMissingSurnameMapsToMapRunMissingFieldsException" classname="com.maprun.results.client.MapRunApiClientTest" time="0.007"/>
+  <testcase name="timeoutMapsToMapRunTimeoutException" classname="com.maprun.results.client.MapRunApiClientTest" time="1.007"/>
+  <testcase name="successfulResponseIsParsedCorrectly" classname="com.maprun.results.client.MapRunApiClientTest" time="0.024"/>
 </testsuite>

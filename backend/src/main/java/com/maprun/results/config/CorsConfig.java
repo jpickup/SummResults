@@ -19,6 +19,7 @@ public class CorsConfig implements WebMvcConfigurer {
         String allowedOrigin = environment.getProperty("ALLOWED_ORIGIN", "*");
         registry.addMapping("/api/**")
                 .allowedOrigins(allowedOrigin)
-                .allowedMethods("GET");
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("Content-Type");
     }
 }

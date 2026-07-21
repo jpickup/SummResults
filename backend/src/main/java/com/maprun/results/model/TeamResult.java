@@ -26,7 +26,9 @@ import java.util.List;
 public record TeamResult(
         String teamName,
         List<String> members,
+        String day1Controls,
         int day1NetScore,
+        String day2Controls,
         int day2NetScore,
         int totalScore,
         int handicapPct,

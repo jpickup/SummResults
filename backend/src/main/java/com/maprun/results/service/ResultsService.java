@@ -2,10 +2,7 @@ package com.maprun.results.service;
 
 import com.maprun.results.client.MapRunApiClient;
 import com.maprun.results.config.EventsConfig;
-import com.maprun.results.model.DayResult;
-import com.maprun.results.model.ParticipantResult;
-import com.maprun.results.model.Team;
-import com.maprun.results.model.TeamResult;
+import com.maprun.results.model.*;
 import com.maprun.results.scoring.HandicapEngine;
 import com.maprun.results.scoring.ScoringEngine;
 import com.maprun.results.teams.TeamsRepository;
@@ -98,10 +95,18 @@ public class ResultsService {
                 continue;
             }
 
+            String day1Controls = memberResults.stream().findFirst()
+                    .map(r -> toControlList(r.day1Controls()))
+                    .orElse("");
+
             int day1Net = memberResults.stream()
                     .mapToInt(ParticipantResult::day1NetScore)
                     .max()
                     .orElse(0);
+
+            String day2Controls = memberResults.stream().findFirst()
+                    .map(r -> toControlList(r.day2Controls()))
+                    .orElse("");
 
             int day2Net = memberResults.stream()
                     .mapToInt(ParticipantResult::day2NetScore)
@@ -112,7 +117,10 @@ public class ResultsService {
             int pct = handicapEngine.handicapPct(team);
             int hScore = handicapEngine.handicapScore(total, pct);
 
-            teamResults.add(new TeamResult(team.teamName(), members, day1Net, day2Net, total, pct, hScore));
+            teamResults.add(new TeamResult(team.teamName(), members,
+                    day1Controls, day1Net,
+                    day2Controls, day2Net,
+                    total, pct, hScore));
             claimed.addAll(members);
         }
 
@@ -122,7 +130,9 @@ public class ResultsService {
                 teamResults.add(new TeamResult(
                         p.participantName(),
                         List.of(p.participantName()),
+                        toControlList(p.day1Controls()),
                         p.day1NetScore(),
+                        toControlList(p.day2Controls()),
                         p.day2NetScore(),
                         p.totalScore(),
                         0,
@@ -136,6 +146,10 @@ public class ResultsService {
                         .thenComparing(TeamResult::teamName));
 
         return teamResults;
+    }
+
+    private String toControlList(List<ControlVisit> controls) {
+        return String.join(",", controls.stream().map(ControlVisit::controlId).toList());
     }
 
     private static List<String> membersOf(Team team) {

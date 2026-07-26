@@ -13,6 +13,7 @@ import com.maprun.results.model.MapRunResultsResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
@@ -87,7 +88,7 @@ public class MapRunApiClient {
                             .build())
                     .retrieve()
                     .onStatus(
-                            status -> status.isError(),
+                            HttpStatusCode::isError,
                             (request, response) -> {
                                 throw new MapRunHttpErrorException(
                                         day,
@@ -155,12 +156,24 @@ public class MapRunApiClient {
             // Controls are mapped with points=0; the gross/net scores are used
             // for all scoring calculations instead.
             List<ControlVisit> controls = raw.punchControlIds().stream()
-                    .map(id -> new ControlVisit(id, 0))
+                    .map(id -> new ControlVisit(id, idToScore(id), false))
                     .toList();
             int penalty = raw.grossScore() - raw.netScore();
             results.add(new DayResult(name, controls, raw.grossScore(), penalty));
         }
         return results;
+    }
+
+    private int idToScore(String id) {
+        if (id.contains("(Extra)")) return 0;
+        try {
+            int controlNumber = Integer.parseInt(id);
+            return (controlNumber/10) * 10;
+        }
+        catch (NumberFormatException ex) {
+            logger.warn("Invalid control number {}, setting score to zero", id);
+            return 0;
+        }
     }
 
     private void validateParticipant(MapRunParticipantRaw raw, int day) {

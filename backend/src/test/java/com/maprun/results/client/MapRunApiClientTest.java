@@ -105,7 +105,7 @@ class MapRunApiClientTest {
         assertThat(pickup.controls()).hasSize(33);
         assertThat(pickup.controls().get(0).controlId()).isEqualTo("45");
         // Per-control points are not provided by the API — always 0
-        assertThat(pickup.controls().get(0).points()).isEqualTo(0);
+        assertThat(pickup.controls().get(0).points()).isEqualTo(40);
 
         // Third participant: Dan Martyn — penalty = GrossScore(1000) - NetScore(720)
         DayResult martyn = results.get(2);

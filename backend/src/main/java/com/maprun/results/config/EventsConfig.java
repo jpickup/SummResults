@@ -50,6 +50,8 @@ public class EventsConfig {
         /** MapRun event ID for Day 2. */
         private String day2EventId;
 
+        private boolean uniqueControls;
+
         public String getId() { return id; }
         public void setId(String id) { this.id = id; }
 
@@ -61,5 +63,13 @@ public class EventsConfig {
 
         public String getDay2EventId() { return day2EventId; }
         public void setDay2EventId(String day2EventId) { this.day2EventId = day2EventId; }
+
+        public boolean isUniqueControls() {
+            return uniqueControls;
+        }
+
+        public void setUniqueControls(boolean uniqueControls) {
+            this.uniqueControls = uniqueControls;
+        }
     }
 }

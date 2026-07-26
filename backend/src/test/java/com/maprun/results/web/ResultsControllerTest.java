@@ -98,7 +98,9 @@ class ResultsControllerTest {
         TeamResult team = new TeamResult(
                 "Smith & Jones",
                 List.of("Smith John", "Jones Alice"),
+                "50,51",
                 100,
+                "40,41",
                 80,
                 180,
                 10,

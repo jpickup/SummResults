@@ -1,5 +1,6 @@
 package com.maprun.results.scoring;
 
+import com.maprun.results.config.EventsConfig;
 import com.maprun.results.model.ControlVisit;
 import com.maprun.results.model.DayResult;
 import com.maprun.results.model.ParticipantResult;
@@ -26,6 +27,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ScoringEnginePropertyTest {
 
     private final ScoringEngine engine = new ScoringEngine();
+    private final EventsConfig.EventEntry nonUniqueEvent = new EventsConfig.EventEntry();
+    private final EventsConfig.EventEntry uniqueEvent = new EventsConfig.EventEntry();
+    {
+        uniqueEvent.setUniqueControls(true);
+    }
 
     // -------------------------------------------------------------------------
     // Arbitraries
@@ -56,7 +62,8 @@ class ScoringEnginePropertyTest {
                 .ofMaxLength(6)
                 .filter(s -> !s.isBlank());
         Arbitrary<Integer> points = Arbitraries.integers().between(0, 100);
-        return Combinators.combine(controlId, points).as(ControlVisit::new);
+        return Combinators.combine(controlId, points)
+                .as((id,p) -> new ControlVisit(id, p, false));
     }
 
     /**
@@ -98,7 +105,7 @@ class ScoringEnginePropertyTest {
         DayResult day1 = new DayResult(name, day1Controls, day1Gross, day1Penalty);
         DayResult day2 = new DayResult(name, day2Controls, day2Gross, day2Penalty);
 
-        List<ParticipantResult> results = engine.calculate(List.of(day1), List.of(day2));
+        List<ParticipantResult> results = engine.calculate(uniqueEvent, List.of(day1), List.of(day2));
 
         ParticipantResult result = results.stream()
                 .filter(r -> r.participantName().equals(name))
@@ -138,7 +145,7 @@ class ScoringEnginePropertyTest {
         DayResult day1 = new DayResult(name, List.of(), grossScore, penalty);
 
         // No Day 2 entry for this participant
-        List<ParticipantResult> results = engine.calculate(List.of(day1), List.of());
+        List<ParticipantResult> results = engine.calculate(nonUniqueEvent, List.of(day1), List.of());
 
         ParticipantResult result = results.stream()
                 .filter(r -> r.participantName().equals(name))
@@ -173,7 +180,7 @@ class ScoringEnginePropertyTest {
         DayResult day1 = new DayResult(name, day1Controls, day1Gross, day1Penalty);
         DayResult day2 = new DayResult(name, day2Controls, day2Gross, day2Penalty);
 
-        List<ParticipantResult> results = engine.calculate(List.of(day1), List.of(day2));
+        List<ParticipantResult> results = engine.calculate(uniqueEvent, List.of(day1), List.of(day2));
 
         ParticipantResult result = results.stream()
                 .filter(r -> r.participantName().equals(name))
@@ -219,7 +226,7 @@ class ScoringEnginePropertyTest {
         DayResult day1 = new DayResult(name, day1Controls, day1Gross, day1Penalty);
         DayResult day2 = new DayResult(name, day2Controls, day2Gross, day2Penalty);
 
-        List<ParticipantResult> results = engine.calculate(List.of(day1), List.of(day2));
+        List<ParticipantResult> results = engine.calculate(nonUniqueEvent, List.of(day1), List.of(day2));
 
         ParticipantResult result = results.stream()
                 .filter(r -> r.participantName().equals(name))

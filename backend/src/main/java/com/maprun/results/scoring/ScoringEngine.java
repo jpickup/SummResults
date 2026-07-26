@@ -1,17 +1,14 @@
 package com.maprun.results.scoring;
 
+import com.maprun.results.config.EventsConfig;
 import com.maprun.results.model.ControlVisit;
 import com.maprun.results.model.DayResult;
 import com.maprun.results.model.ParticipantResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +24,7 @@ import java.util.stream.Collectors;
  */
 @Component
 public class ScoringEngine {
+    private static final Logger logger = LoggerFactory.getLogger(ScoringEngine.class);
 
     /**
      * Calculates combined results for all participants across both days.
@@ -36,14 +34,15 @@ public class ScoringEngine {
      * @return sorted list of {@link ParticipantResult}, one entry per unique participant
      */
     public List<ParticipantResult> calculate(
+            EventsConfig.EventEntry event,
             List<DayResult> day1Results,
             List<DayResult> day2Results) {
-
         // Index both day lists by participant name for O(1) lookup
         Map<String, DayResult> day1Map = day1Results.stream()
-                .collect(Collectors.toMap(DayResult::participantName, r -> r));
+                .collect(Collectors.toMap(DayResult::participantName, r -> r, (a,b) -> b));
+
         Map<String, DayResult> day2Map = day2Results.stream()
-                .collect(Collectors.toMap(DayResult::participantName, r -> r));
+                .collect(Collectors.toMap(DayResult::participantName, r -> r, (a,b) -> b));
 
         // Union of all participant names across both days (preserving encounter order)
         Set<String> allNames = new LinkedHashSet<>();
@@ -68,12 +67,23 @@ public class ScoringEngine {
                     .collect(Collectors.toSet());
 
             // --- Day 2 fields ---
-            List<ControlVisit> day2Controls = d2.map(DayResult::controls).orElse(List.of());
+            List<ControlVisit> day2Controls = d2.map(DayResult::controls)
+                    .map(cs -> cs.stream()
+                            .map(c -> new ControlVisit(c.controlId(), c.points(), event.isUniqueControls() && day1ControlIds.contains(c.controlId())))
+                            .toList()
+                    )
+                    .orElse(List.of());
             int day2GrossScore = d2.map(DayResult::grossScore).orElse(0);
             int day2Penalty    = d2.map(DayResult::penalty).orElse(0);
 
             // Deduction = sum of points for Day 2 controls whose IDs appear in Day 1
-            int day2Deduction = day2Controls.stream()
+            List<ControlVisit> day2Duplicates = event.isUniqueControls() ? day2Controls.stream()
+                    .filter(cv -> day1ControlIds.contains(cv.controlId()))
+                    .toList()
+                    : Collections.emptyList();
+            logger.info("Dups: {}", day2Duplicates);
+
+            int day2Deduction = day2Duplicates.stream()
                     .filter(cv -> day1ControlIds.contains(cv.controlId()))
                     .mapToInt(ControlVisit::points)
                     .sum();
@@ -81,6 +91,13 @@ public class ScoringEngine {
             int day2NetScore = day2GrossScore - day2Deduction - day2Penalty;
 
             int totalScore = day1NetScore + day2NetScore;
+
+            logger.info("E:{} N:{} :{} S:{} = {} ({} - {}) + {} ({} - {} - {})",
+                    event.getId(), name, event.isUniqueControls(),
+                    totalScore,
+                    day1NetScore, day1GrossScore, day1Penalty,
+                    day2NetScore, day2GrossScore, day2Penalty, day2Deduction
+            );
 
             results.add(new ParticipantResult(
                     name,

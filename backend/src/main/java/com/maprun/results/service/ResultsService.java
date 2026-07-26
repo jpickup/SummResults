@@ -74,7 +74,7 @@ public class ResultsService {
         List<DayResult> day1Results = mapRunApiClient.fetchDay(event.getDay1EventId(), 1);
         List<DayResult> day2Results = mapRunApiClient.fetchDay(event.getDay2EventId(), 2);
 
-        List<ParticipantResult> individual = scoringEngine.calculate(day1Results, day2Results);
+        List<ParticipantResult> individual = scoringEngine.calculate(event, day1Results, day2Results);
 
         Map<String, ParticipantResult> byName = individual.stream()
                 .collect(Collectors.toMap(ParticipantResult::participantName, r -> r));
@@ -149,7 +149,9 @@ public class ResultsService {
     }
 
     private String toControlList(List<ControlVisit> controls) {
-        return String.join(",", controls.stream().map(ControlVisit::controlId).toList());
+        return String.join(",", controls.stream()
+                .map(ControlVisit::controlDescription)
+                .toList());
     }
 
     private static List<String> membersOf(Team team) {

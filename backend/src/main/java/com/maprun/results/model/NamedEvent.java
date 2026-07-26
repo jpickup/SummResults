@@ -15,5 +15,6 @@ public record NamedEvent(
         String id,
         String name,
         String day1EventId,
-        String day2EventId
+        String day2EventId,
+        boolean uniqueControls
 ) {}

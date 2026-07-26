@@ -1,5 +1,6 @@
 package com.maprun.results.scoring;
 
+import com.maprun.results.config.EventsConfig;
 import com.maprun.results.model.ControlVisit;
 import com.maprun.results.model.DayResult;
 import com.maprun.results.model.ParticipantResult;
@@ -13,10 +14,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ScoringEngineTest {
 
     private ScoringEngine engine;
+    private final EventsConfig.EventEntry eventUnique = new EventsConfig.EventEntry();
+    private final EventsConfig.EventEntry eventNonUnique = new EventsConfig.EventEntry();
+
 
     @BeforeEach
     void setUp() {
         engine = new ScoringEngine();
+        eventUnique.setUniqueControls(true);
+        eventUnique.setId("U");
+        eventUnique.setName("Unique");
+        eventNonUnique.setUniqueControls(false);
+        eventNonUnique.setId("NU");
+        eventNonUnique.setName("Not Unique");
     }
 
     /**
@@ -49,7 +59,7 @@ class ScoringEngineTest {
                 60, 10
         );
 
-        List<ParticipantResult> results = engine.calculate(List.of(day1), List.of(day2));
+        List<ParticipantResult> results = engine.calculate(eventUnique, List.of(day1), List.of(day2));
 
         assertThat(results).hasSize(1);
         ParticipantResult r = results.get(0);
@@ -84,7 +94,7 @@ class ScoringEngineTest {
                 70, 0
         );
 
-        List<ParticipantResult> results = engine.calculate(List.of(day1), List.of());
+        List<ParticipantResult> results = engine.calculate(eventUnique, List.of(day1), List.of());
 
         assertThat(results).hasSize(1);
         ParticipantResult r = results.get(0);
@@ -117,7 +127,7 @@ class ScoringEngineTest {
                 75, 5
         );
 
-        List<ParticipantResult> results = engine.calculate(List.of(), List.of(day2));
+        List<ParticipantResult> results = engine.calculate(eventUnique, List.of(), List.of(day2));
 
         assertThat(results).hasSize(1);
         ParticipantResult r = results.get(0);
@@ -163,7 +173,7 @@ class ScoringEngineTest {
                 80, 10
         );
 
-        List<ParticipantResult> results = engine.calculate(List.of(day1), List.of(day2));
+        List<ParticipantResult> results = engine.calculate(eventUnique, List.of(day1), List.of(day2));
 
         assertThat(results).hasSize(1);
         ParticipantResult r = results.get(0);
@@ -176,6 +186,43 @@ class ScoringEngineTest {
 
         // totalScore = (80 - 0) + (-10) = 70
         assertThat(r.totalScore()).isEqualTo(70);
+    }
+
+    @Test
+    void allControlsOverlapButNotUnqiueEvent() {
+        // Day 1: controls 401 (50pts), 402 (30pts)  gross=80, penalty=0
+        DayResult day1 = new DayResult(
+                "Dave Brown",
+                List.of(
+                        new ControlVisit("401", 50),
+                        new ControlVisit("402", 30)
+                ),
+                80, 0
+        );
+
+        // Day 2: same controls 401 (50pts), 402 (30pts)  gross=80, penalty=10
+        DayResult day2 = new DayResult(
+                "Dave Brown",
+                List.of(
+                        new ControlVisit("401", 50),
+                        new ControlVisit("402", 30)
+                ),
+                80, 10
+        );
+
+        List<ParticipantResult> results = engine.calculate(eventNonUnique, List.of(day1), List.of(day2));
+
+        assertThat(results).hasSize(1);
+        ParticipantResult r = results.get(0);
+
+        // Deduction = all of Day 2's control points = 80
+        assertThat(r.day2Deduction()).isEqualTo(0);
+
+        // day2NetScore = 80 - 10 = 70 (can be negative)
+        assertThat(r.day2NetScore()).isEqualTo(70);
+
+        // totalScore = (80 - 0) + (80 - 10) = 150
+        assertThat(r.totalScore()).isEqualTo(150);
     }
 
     /**
@@ -204,7 +251,7 @@ class ScoringEngineTest {
                 60, 0
         );
 
-        List<ParticipantResult> results = engine.calculate(List.of(day1), List.of(day2));
+        List<ParticipantResult> results = engine.calculate(eventUnique, List.of(day1), List.of(day2));
 
         assertThat(results).hasSize(1);
         ParticipantResult r = results.get(0);
@@ -235,7 +282,7 @@ class ScoringEngineTest {
         );
 
         // Pass in Zorro first so we can verify sort reorders them
-        List<ParticipantResult> results = engine.calculate(
+        List<ParticipantResult> results = engine.calculate(eventUnique,
                 List.of(zorro, able),
                 List.of()
         );

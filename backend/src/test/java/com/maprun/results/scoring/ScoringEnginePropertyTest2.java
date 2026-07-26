@@ -1,5 +1,6 @@
 package com.maprun.results.scoring;
 
+import com.maprun.results.config.EventsConfig;
 import com.maprun.results.model.ControlVisit;
 import com.maprun.results.model.DayResult;
 import com.maprun.results.model.ParticipantResult;
@@ -8,7 +9,6 @@ import net.jqwik.api.constraints.NotBlank;
 import net.jqwik.api.constraints.Positive;
 import net.jqwik.api.constraints.Size;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ScoringEnginePropertyTest2 {
 
     private final ScoringEngine engine = new ScoringEngine();
+    private final EventsConfig.EventEntry event = new EventsConfig.EventEntry();
 
     // -------------------------------------------------------------------------
     // Property 5: Results are sorted by total score descending, then last name ascending
@@ -41,7 +42,7 @@ class ScoringEnginePropertyTest2 {
             @ForAll("participantDay1Results") @Size(min = 1, max = 10) List<DayResult> day1Results,
             @ForAll("participantDay2Results") @Size(min = 0, max = 5)  List<DayResult> day2Results) {
 
-        List<ParticipantResult> results = engine.calculate(day1Results, day2Results);
+        List<ParticipantResult> results = engine.calculate(event, day1Results, day2Results);
 
         for (int i = 0; i < results.size() - 1; i++) {
             ParticipantResult a = results.get(i);
@@ -119,7 +120,7 @@ class ScoringEnginePropertyTest2 {
         DayResult day1Entry = new DayResult(participantName, day1Controls, grossScore, penalty);
 
         // Day 2 is empty — participant is absent from Day 2
-        List<ParticipantResult> results = engine.calculate(List.of(day1Entry), List.of());
+        List<ParticipantResult> results = engine.calculate(event, List.of(day1Entry), List.of());
 
         ParticipantResult result = results.stream()
                 .filter(r -> r.participantName().equals(participantName))
@@ -162,7 +163,7 @@ class ScoringEnginePropertyTest2 {
         DayResult day2Entry = new DayResult(participantName, day2Controls, grossScore, penalty);
 
         // Day 1 is empty — participant is absent from Day 1
-        List<ParticipantResult> results = engine.calculate(List.of(), List.of(day2Entry));
+        List<ParticipantResult> results = engine.calculate(event, List.of(), List.of(day2Entry));
 
         ParticipantResult result = results.stream()
                 .filter(r -> r.participantName().equals(participantName))
@@ -209,7 +210,7 @@ class ScoringEnginePropertyTest2 {
         DayResult day1Entry = new DayResult(participantName, day1Controls, day1Gross, day1Penalty);
         DayResult day2Entry = new DayResult(participantName, day2Controls, day2Gross, day2Penalty);
 
-        List<ParticipantResult> results = engine.calculate(List.of(day1Entry), List.of(day2Entry));
+        List<ParticipantResult> results = engine.calculate(event, List.of(day1Entry), List.of(day2Entry));
 
         ParticipantResult result = results.stream()
                 .filter(r -> r.participantName().equals(participantName))

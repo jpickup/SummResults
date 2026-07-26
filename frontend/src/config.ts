@@ -21,6 +21,11 @@ declare global {
 function loadAppConfig(): AppConfig {
   const raw = window.__APP_CONFIG__ ?? {};
 
+  // doesn't work
+  // const backendBaseUrl = process.env.variableName.VUE_APP_BACKEND_URL
+  // console.log("URL:" + backendBaseUrl);
+
+
   if (!raw.apiBaseUrl || raw.apiBaseUrl.trim() === '') {
     throw new Error('APP_CONFIG: apiBaseUrl is not configured');
   }

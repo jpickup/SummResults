@@ -6,10 +6,10 @@
           <th rowspan="2">#</th>
           <th rowspan="2">Team</th>
           <th rowspan="2">Members</th>
-          <th colspan="2" class="group-header">Day 1</th>
-          <th colspan="2" class="group-header">Day 2</th>
           <th rowspan="2" class="group-total">Score</th>
           <th rowspan="2" class="handicap-group">Handicap</th>
+          <th colspan="2" class="group-header">Day 1</th>
+          <th colspan="2" class="group-header">Day 2</th>
         </tr>
         <tr>
           <th>Controls</th>
@@ -23,14 +23,14 @@
           <td class="rank">{{ index + 1 }}</td>
           <td class="team-name">{{ result.teamName }}</td>
           <td class="members">{{ result.members.join(', ') }}</td>
-          <td class="controls">{{ result.day1Controls }}</td>
-          <td class="score">{{ result.day1NetScore }}</td>
-          <td class="controls">{{ result.day2Controls }}</td>
-          <td class="score">{{ result.day2NetScore }}</td>
           <td class="score total">{{ result.totalScore }}</td>
           <td class="score handicap-col" :class="{ 'has-handicap': result.handicapPct > 0 }">
             {{ result.handicapPct > 0 ? result.handicapScore : result.totalScore }}
           </td>
+          <td class="controls">{{ result.day1Controls }}</td>
+          <td class="score">{{ result.day1NetScore }}</td>
+          <td class="controls">{{ result.day2Controls }}</td>
+          <td class="score">{{ result.day2NetScore }}</td>
         </tr>
       </tbody>
     </table>

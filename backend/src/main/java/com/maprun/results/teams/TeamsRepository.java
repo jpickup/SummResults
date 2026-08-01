@@ -36,6 +36,7 @@ public class TeamsRepository {
     public TeamsRepository(
             @Value("${app.teams-file:teams.json}") String teamsFilePath,
             ObjectMapper objectMapper) {
+        logger.info("Using a teams file at {}", teamsFilePath);
         this.teamsFile = Path.of(teamsFilePath);
         this.objectMapper = objectMapper;
     }

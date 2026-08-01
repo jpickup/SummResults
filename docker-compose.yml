@@ -1,28 +1,28 @@
 services:
 
   summ-backend:
-    image: summ-backend:latest
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
       - "8092:8080"
     environment:
-      PORT: 8092
-
+      # ALLOWED_ORIGIN restricts CORS to the frontend origin.
+      # Use "*" for development or set to your frontend URL in production.
+      ALLOWED_ORIGIN: ${ALLOWED_ORIGIN:-*}
     restart: unless-stopped
 
   summ-frontend:
-    image: summ-frontend:latest
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      # VUE_APP_* vars are baked into the static bundle at build time by Webpack.
-      # They must be supplied here as build args, not just as runtime environment vars.
-      args:
-        VUE_APP_BACKEND_URL: ${VUE_APP_BACKEND_URL}
     ports:
       - "8093:80"
+    environment:
+      # API_BASE_URL is injected into index.html at container startup via envsubst.
+      # Point this at the backend — use the Docker service name for internal networking,
+      # or the public URL if the frontend is accessed from a browser outside Docker.
+      API_BASE_URL: ${API_BASE_URL:-http://localhost:8092}
     depends_on:
       - summ-backend
     restart: unless-stopped

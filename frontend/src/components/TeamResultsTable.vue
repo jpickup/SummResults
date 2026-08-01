@@ -57,9 +57,9 @@ td { white-space: nowrap; }
 
 .rank    { text-align: center; color: #666; width: 2.5rem; }
 .team-name { font-weight: 600; }
-.members { color: #555; font-size: 0.82rem; white-space: normal; }
+.members { color: #555; font-size: 0.82rem; white-space: normal; min-width: 8rem; }
 .score   { text-align: right; }
-.controls { font-size: 0.6rem; white-space: wrap;}
+.controls { font-size: 0.6rem; white-space: normal; min-width: 5rem; word-break: break-word; }
 .total   { font-weight: 700; }
 
 .handicap-col { background: #f3f7ff; font-weight: 600; }

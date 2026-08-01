@@ -1,43 +1,37 @@
 import type { AppConfig } from './types';
 
 /**
- * Augment the global Window interface to declare the runtime config slot
- * injected by the <script> block in index.html.
- */
-declare global {
-  interface Window {
-    __APP_CONFIG__?: Partial<AppConfig>;
-  }
-}
-
-/**
- * Read and validate the runtime configuration object injected via
- * window.__APP_CONFIG__ in index.html.
+ * Read and validate the backend API base URL.
  *
- * Throws a descriptive Error if any required field is absent or empty,
- * so that App.vue can catch it and render an error state without
- * attempting any backend API calls.
+ * Source priority:
+ *  1. <meta name="api-base-url"> in index.html — set at container startup
+ *     by the frontend Dockerfile's envsubst step (Docker / production).
+ *  2. import.meta.env.VITE_API_BASE_URL — set in .env for local `npm run dev`.
+ *
+ * Throws a descriptive Error if neither source yields a usable URL.
  */
 function loadAppConfig(): AppConfig {
-  const raw = window.__APP_CONFIG__ ?? {};
+  // Read the meta tag value set by envsubst at container startup.
+  const metaTag = document.querySelector<HTMLMetaElement>('meta[name="api-base-url"]');
+  const metaValue = metaTag?.content ?? '';
 
-  // doesn't work
-  // const backendBaseUrl = process.env.variableName.VUE_APP_BACKEND_URL
-  // console.log("URL:" + backendBaseUrl);
+  // If the placeholder was never substituted it will still be the literal
+  // token we put in index.html. Treat that as "not configured".
+  const isPlaceholder = metaValue === '' || metaValue === '__API_BASE_URL__';
 
+  const apiBaseUrl = isPlaceholder
+    ? (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? ''
+    : metaValue;
 
-  if (!raw.apiBaseUrl || raw.apiBaseUrl.trim() === '') {
-    throw new Error('APP_CONFIG: apiBaseUrl is not configured');
+  if (!apiBaseUrl || apiBaseUrl.trim() === '') {
+    throw new Error(
+      'apiBaseUrl is not configured. ' +
+      'For Docker: ensure API_BASE_URL is set in your environment. ' +
+      'For local dev: set VITE_API_BASE_URL in .env.'
+    );
   }
 
-  return {
-    apiBaseUrl: raw.apiBaseUrl.trim(),
-  };
+  return { apiBaseUrl: apiBaseUrl.trim() };
 }
 
-/**
- * The validated application configuration.
- * Exported for use by composables and any other module that needs
- * the backend base URL.
- */
 export const appConfig: AppConfig = loadAppConfig();

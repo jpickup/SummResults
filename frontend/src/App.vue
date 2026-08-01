@@ -13,7 +13,9 @@ import TeamsManager from './components/TeamsManager.vue'
 
 type View = 'events' | 'results' | 'teams'
 
-const { events, loading, error } = useEvents(appConfig.apiBaseUrl)
+const backendBaseUrl = appConfig.apiBaseUrl
+
+const { events, loading, error } = useEvents(backendBaseUrl)
 
 const view = ref<View>('events')
 const selectedEvent = ref<NamedEvent | null>(null)
@@ -40,12 +42,12 @@ function backFromTeams() {
 <template>
   <TeamsManager
     v-if="view === 'teams'"
-    :apiBaseUrl="appConfig.apiBaseUrl"
+    :apiBaseUrl="backendBaseUrl"
     @back="backFromTeams"
   />
   <ResultsPage
     v-else-if="view === 'results' && selectedEvent"
-    :apiBaseUrl="appConfig.apiBaseUrl"
+    :apiBaseUrl="backendBaseUrl"
     :eventId="selectedEvent.id"
     :eventName="selectedEvent.name"
     @back="goToEvents"

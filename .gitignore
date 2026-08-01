@@ -30,3 +30,6 @@ replay_pid*
 
 # Vue config
 .env*
+
+# Team data (persisted on host, not committed)
+data/teams.json

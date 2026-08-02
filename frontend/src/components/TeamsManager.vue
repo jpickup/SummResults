@@ -4,6 +4,7 @@ import { useTeams } from '../composables/useTeams';
 import type { Team } from '../types';
 import LoadingSpinner from './LoadingSpinner.vue';
 import ErrorMessage from './ErrorMessage.vue';
+import AppHeader from './AppHeader.vue';
 
 const props = defineProps<{ apiBaseUrl: string }>();
 const emit = defineEmits<{ (e: 'back'): void }>();
@@ -94,16 +95,17 @@ async function confirmDelete(team: Team) {
 
 <template>
   <div class="teams-manager">
-    <div class="manager-header">
+    <AppHeader>
       <button class="back-button" @click="emit('back')">← Back</button>
-      <h1>Manage Teams</h1>
+      <h1 class="page-title">Manage Teams</h1>
       <button class="add-button" @click="openCreate">+ Add Team</button>
-    </div>
+    </AppHeader>
 
     <LoadingSpinner v-if="loading" />
     <ErrorMessage v-else-if="error" :message="error" />
 
     <template v-else>
+      <div class="manager-body">
       <!-- ── inline form ── -->
       <div v-if="formVisible" class="team-form">
         <h2>{{ editingId === null ? 'New Team' : 'Edit Team' }}</h2>
@@ -198,16 +200,18 @@ async function confirmDelete(team: Team) {
           </tr>
         </tbody>
       </table>
+      </div>
     </template>
   </div>
 </template>
 
 <style scoped>
 .teams-manager {
-  padding: 1rem;
   max-width: 900px;
   margin: 0 auto;
 }
+
+.page-title { flex: 1; margin: 0; font-size: 1.2rem; }
 
 .manager-header {
   display: flex;
@@ -287,7 +291,9 @@ async function confirmDelete(team: Team) {
   color: #aaa;
 }
 
-.required { color: #c00; }
+.manager-body {
+  padding: 0 1rem 1rem;
+}
 .optional { font-weight: normal; color: #666; }
 
 .form-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }

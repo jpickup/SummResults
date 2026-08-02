@@ -13,7 +13,9 @@ const EVENT_ID = 'SUMM-2026';
 const SAMPLE_RESULT: TeamResult = {
   teamName: 'Smith & Jones',
   members: ['Smith John', 'Jones Alice'],
+  day1Controls: '101, 102, 103',
   day1NetScore: 100,
+  day2Controls: '104, 105',
   day2NetScore: 80,
   totalScore: 180,
   handicapPct: 10,

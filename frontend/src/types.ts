@@ -74,7 +74,9 @@ export interface TeamRequest {
 export interface TeamResult {
   teamName: string;
   members: string[];
+  day1Controls: string;
   day1NetScore: number;
+  day2Controls: string;
   day2NetScore: number;
   totalScore: number;
   handicapPct: number;

@@ -2,6 +2,7 @@
 import type { NamedEvent } from '../types';
 import LoadingSpinner from './LoadingSpinner.vue';
 import ErrorMessage from './ErrorMessage.vue';
+import AppHeader from './AppHeader.vue';
 
 defineProps<{
   events: NamedEvent[];
@@ -16,12 +17,12 @@ const emit = defineEmits<{
 
 <template>
   <div class="landing">
-    <header class="landing-header">
-      <h1 class="landing-title">MapRun Results</h1>
-      <p class="landing-subtitle">Select an event to view results</p>
-    </header>
+    <AppHeader>
+      <h1 class="landing-title">SUMM Results</h1>
+    </AppHeader>
 
     <main class="landing-main">
+      <p class="landing-subtitle">Select an event to view results</p>
       <LoadingSpinner v-if="loading" />
       <ErrorMessage v-else-if="error" :message="error" />
       <p v-else-if="events.length === 0" class="empty-state">No events available.</p>
@@ -42,31 +43,27 @@ const emit = defineEmits<{
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 4rem 1rem 2rem;
-}
-
-.landing-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
 }
 
 .landing-title {
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  letter-spacing: -0.5px;
   color: #111;
-  margin-bottom: 0.4rem;
+  margin: 0;
 }
 
 .landing-subtitle {
   font-size: 1rem;
   color: #666;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
 }
 
 .landing-main {
   width: 100%;
   max-width: 480px;
+  padding: 0 1rem;
+  align-self: center;
 }
 
 .events-list {

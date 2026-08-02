@@ -21,8 +21,8 @@ import java.util.List;
  * temp file then move). If the file does not yet exist an empty list is
  * returned and the file is created on the first write.
  *
- * <p>The file path is controlled by the {@code app.teams-file} property
- * (default: {@code teams.json} in the process working directory).
+ * <p>The file path is controlled by the {@code app.teams-dir} property
+ * (default: in the process working directory).
  */
 @Repository
 public class TeamsRepository {
@@ -30,21 +30,22 @@ public class TeamsRepository {
     private static final Logger logger = LoggerFactory.getLogger(TeamsRepository.class);
     private static final TypeReference<List<Team>> LIST_TYPE = new TypeReference<>() {};
 
-    private final Path teamsFile;
+    private final String teamsDirectory;
     private final ObjectMapper objectMapper;
 
     public TeamsRepository(
-            @Value("${app.teams-file:teams.json}") String teamsFilePath,
+            @Value("${app.teams-dir:.}") String teamsDirectory,
             ObjectMapper objectMapper) {
-        logger.info("Using a teams file at {}", teamsFilePath);
-        this.teamsFile = Path.of(teamsFilePath);
+        logger.info("Using a teams files in {}", teamsDirectory);
+        this.teamsDirectory = teamsDirectory;
         this.objectMapper = objectMapper;
     }
 
     /**
-     * Returns all persisted teams, or an empty list if the file does not exist.
+     * Returns all persisted teams for the event, or an empty list if the file does not exist.
      */
-    public synchronized List<Team> findAll() {
+    public synchronized List<Team> findAll(String eventFileName) {
+        Path teamsFile = teamsFile(eventFileName);
         if (!Files.exists(teamsFile)) {
             return new ArrayList<>();
         }
@@ -56,10 +57,17 @@ public class TeamsRepository {
         }
     }
 
+    private Path teamsFile(String eventFileName) {
+        Path path = Path.of(teamsDirectory, eventFileName);
+        logger.info("Path for teams file {}", path);
+        return path;
+    }
+
     /**
      * Persists the given list, replacing the entire file contents.
      */
-    public synchronized void saveAll(List<Team> teams) {
+    public synchronized void saveAll(String eventFileName, List<Team> teams) {
+        Path teamsFile = teamsFile(eventFileName);
         try {
             // Write to a sibling temp file then atomically move to avoid partial writes.
             Path tmp = Path.of(teamsFile + ".tmp");

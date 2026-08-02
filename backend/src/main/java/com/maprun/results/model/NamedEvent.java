@@ -10,11 +10,13 @@ package com.maprun.results.model;
  * @param name         a human-readable label, e.g. {@code "The SUMM, 2026"}
  * @param day1EventId  the MapRun event ID for Day 1
  * @param day2EventId  the MapRun event ID for Day 2
+ * @param teamsFilename the filename to use the store the teams for this event
  */
 public record NamedEvent(
         String id,
         String name,
         String day1EventId,
         String day2EventId,
-        boolean uniqueControls
+        boolean uniqueControls,
+        String teamsFilename
 ) {}

@@ -12,7 +12,7 @@ services:
       ALLOWED_ORIGIN: ${ALLOWED_ORIGIN:-*}
       # Path inside the container where team data is stored.
       # Must match the container-side path in the volume mount below.
-      APP_TEAMS_FILE: /data/teams.json
+      APP_TEAMS_FILE: /data/
     volumes:
       # Mount a host directory into the container so team data persists
       # across container restarts and rebuilds.

@@ -1,5 +1,8 @@
 package com.maprun.results.config;
 
+import com.maprun.results.teams.TeamsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
@@ -18,10 +21,12 @@ import java.util.List;
  * app.events[0].name=The SUMM, 2026
  * app.events[0].day1EventId=SUMM Day 1 v2 ScoreP420
  * app.events[0].day2EventId=SUMM Day 2 v2 ScoreP360
+ * app.events[0].teamsFile=SUMM-Day2
  * </pre>
  */
 @ConfigurationProperties(prefix = "app")
 public class EventsConfig {
+    private static final Logger logger = LoggerFactory.getLogger(EventsConfig.class);
 
     private List<EventEntry> events = new ArrayList<>();
 
@@ -30,7 +35,13 @@ public class EventsConfig {
     }
 
     public void setEvents(List<EventEntry> events) {
+        logger.info("Events: {}", events);
         this.events = events;
+    }
+
+    public EventEntry getEvent(String eventId) {
+        logger.info("Looking for event with Id {}", eventId);
+        return events.stream().filter(e -> e.id.equals(eventId)).findFirst().orElseThrow();
     }
 
     /**
@@ -52,6 +63,8 @@ public class EventsConfig {
 
         private boolean uniqueControls;
 
+        private String teamsFilename;
+
         public String getId() { return id; }
         public void setId(String id) { this.id = id; }
 
@@ -70,6 +83,26 @@ public class EventsConfig {
 
         public void setUniqueControls(boolean uniqueControls) {
             this.uniqueControls = uniqueControls;
+        }
+
+        public void setTeamsFilename(String teamsFilename) {
+            this.teamsFilename = teamsFilename;
+        }
+
+        public String getTeamsFilename() {
+            return teamsFilename;
+        }
+
+        @Override
+        public String toString() {
+            return "EventEntry{" +
+                    "id='" + id + '\'' +
+                    ", name='" + name + '\'' +
+                    ", day1EventId='" + day1EventId + '\'' +
+                    ", day2EventId='" + day2EventId + '\'' +
+                    ", uniqueControls=" + uniqueControls +
+                    ", teamsFilename='" + teamsFilename + '\'' +
+                    '}';
         }
     }
 }

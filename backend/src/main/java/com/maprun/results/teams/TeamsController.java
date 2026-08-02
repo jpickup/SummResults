@@ -3,14 +3,7 @@ package com.maprun.results.teams;
 import com.maprun.results.model.Team;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -19,10 +12,10 @@ import java.util.Map;
  * REST controller for team maintenance.
  *
  * <pre>
- * GET    /api/teams          — list all teams
- * POST   /api/teams          — create a team
- * PUT    /api/teams/{id}     — replace a team
- * DELETE /api/teams/{id}     — delete a team
+ * GET    /api/teams/?eventId={eventId} — list all teams for an event
+ * POST   /api/teams/{eventId}          — create a team
+ * PUT    /api/teams/{eventId}/{id}     — replace a team
+ * DELETE /api/teams/{eventId}/{id}     — delete a team
  * </pre>
  *
  * <p>Request body for POST and PUT:
@@ -49,34 +42,35 @@ public class TeamsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Team>> getAll() {
-        return ResponseEntity.ok(teamsService.getAll());
+    public ResponseEntity<List<Team>> getAll(@RequestParam(name="eventId") String eventId) {
+        return ResponseEntity.ok(teamsService.getAll(eventId));
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody TeamRequest body) {
+    public ResponseEntity<?> create(@RequestParam(name="eventId") String eventId, @RequestBody TeamRequest body) {
         ResponseEntity<?> validation = validateBody(body);
         if (validation != null) return validation;
 
-        Team created = teamsService.create(body);
+        Team created = teamsService.create(eventId, body);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{teamId}")
     public ResponseEntity<?> update(
-            @PathVariable String id,
+            @RequestParam(name="eventId") String eventId,
+            @PathVariable String teamId,
             @RequestBody TeamRequest body) {
 
         ResponseEntity<?> validation = validateBody(body);
         if (validation != null) return validation;
 
-        Team updated = teamsService.update(id, body);
+        Team updated = teamsService.update(eventId, teamId, body);
         return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        teamsService.delete(id);
+    @DeleteMapping("/{teamId}")
+    public ResponseEntity<Void> delete(@RequestParam(name="eventId") String eventId, @PathVariable String teamId) {
+        teamsService.delete(eventId, teamId);
         return ResponseEntity.noContent().build();
     }
 

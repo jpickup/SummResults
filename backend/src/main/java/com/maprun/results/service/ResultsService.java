@@ -79,7 +79,7 @@ public class ResultsService {
         Map<String, ParticipantResult> byName = individual.stream()
                 .collect(Collectors.toMap(ParticipantResult::participantName, r -> r));
 
-        List<Team> teams = teamsRepository.findAll();
+        List<Team> teams = teamsRepository.findAll(event.getTeamsFilename());
         Set<String> claimed = new HashSet<>();
         List<TeamResult> teamResults = new ArrayList<>();
 

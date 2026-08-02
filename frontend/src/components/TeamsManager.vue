@@ -6,10 +6,10 @@ import LoadingSpinner from './LoadingSpinner.vue';
 import ErrorMessage from './ErrorMessage.vue';
 import AppHeader from './AppHeader.vue';
 
-const props = defineProps<{ apiBaseUrl: string }>();
+const props = defineProps<{ apiBaseUrl: string; eventId: string; eventName: string }>();
 const emit = defineEmits<{ (e: 'back'): void }>();
 
-const { teams, loading, error, createTeam, updateTeam, deleteTeam } = useTeams(props.apiBaseUrl);
+const { teams, loading, error, createTeam, updateTeam, deleteTeam } = useTeams(props.apiBaseUrl, props.eventId);
 
 // ── form state ──────────────────────────────────────────────────────────────
 const editingId    = ref<string | null>(null);
@@ -97,7 +97,7 @@ async function confirmDelete(team: Team) {
   <div class="teams-manager">
     <AppHeader>
       <button class="back-button" @click="emit('back')">← Back</button>
-      <h1 class="page-title">Manage Teams</h1>
+      <h1 class="page-title">Manage Teams — {{ eventName }}</h1>
       <button class="add-button" @click="openCreate">+ Add Team</button>
     </AppHeader>
 

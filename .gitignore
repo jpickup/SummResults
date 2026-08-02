@@ -32,4 +32,4 @@ replay_pid*
 .env*
 
 # Team data (persisted on host, not committed)
-data/teams.json
+data/*

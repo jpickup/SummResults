@@ -43,6 +43,8 @@ function backFromTeams() {
   <TeamsManager
     v-if="view === 'teams'"
     :apiBaseUrl="backendBaseUrl"
+    :eventId="selectedEvent?.id ?? ''"
+    :eventName="selectedEvent?.name ?? ''"
     @back="backFromTeams"
   />
   <ResultsPage

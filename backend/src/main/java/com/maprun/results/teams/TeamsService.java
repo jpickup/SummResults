@@ -1,6 +1,9 @@
 package com.maprun.results.teams;
 
+import com.maprun.results.config.EventsConfig;
 import com.maprun.results.model.Team;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,16 +19,21 @@ import java.util.UUID;
  */
 @Service
 public class TeamsService {
+    private static final Logger logger = LoggerFactory.getLogger(TeamsService.class);
 
     private final TeamsRepository teamsRepository;
+    private final EventsConfig eventsConfig;
 
-    public TeamsService(TeamsRepository teamsRepository) {
+    public TeamsService(TeamsRepository teamsRepository, EventsConfig eventsConfig) {
         this.teamsRepository = teamsRepository;
+        this.eventsConfig = eventsConfig;
     }
 
     /** Returns all teams. */
-    public List<Team> getAll() {
-        return teamsRepository.findAll();
+    public List<Team> getAll(String eventId) {
+        EventsConfig.EventEntry event = eventsConfig.getEvent(eventId);
+        logger.info("Loading teams for event {}", event);
+        return teamsRepository.findAll(event.getTeamsFilename());
     }
 
     /**
@@ -33,11 +41,13 @@ public class TeamsService {
      *
      * @return the persisted team with its assigned ID
      */
-    public Team create(TeamsController.TeamRequest req) {
+    public Team create(String eventId, TeamsController.TeamRequest req) {
+        logger.info("Creating team for event {}", eventId);
+        EventsConfig.EventEntry event = eventsConfig.getEvent(eventId);
         Team team = toTeam(UUID.randomUUID().toString(), req);
-        List<Team> teams = teamsRepository.findAll();
+        List<Team> teams = teamsRepository.findAll(event.getTeamsFilename());
         teams.add(team);
-        teamsRepository.saveAll(teams);
+        teamsRepository.saveAll(event.getTeamsFilename(), teams);
         return team;
     }
 
@@ -46,12 +56,14 @@ public class TeamsService {
      *
      * @throws ResponseStatusException 404 if no team with that ID exists
      */
-    public Team update(String id, TeamsController.TeamRequest req) {
-        List<Team> teams = teamsRepository.findAll();
-        int idx = indexById(teams, id);
-        Team updated = toTeam(id, req);
+    public Team update(String eventId, String teamId, TeamsController.TeamRequest req) {
+        logger.info("Updating team for event {}", eventId);
+        EventsConfig.EventEntry event = eventsConfig.getEvent(eventId);
+        List<Team> teams = teamsRepository.findAll(event.getTeamsFilename());
+        int idx = indexById(teams, teamId);
+        Team updated = toTeam(teamId, req);
         teams.set(idx, updated);
-        teamsRepository.saveAll(teams);
+        teamsRepository.saveAll(event.getTeamsFilename(), teams);
         return updated;
     }
 
@@ -60,11 +72,13 @@ public class TeamsService {
      *
      * @throws ResponseStatusException 404 if no team with that ID exists
      */
-    public void delete(String id) {
-        List<Team> teams = teamsRepository.findAll();
-        int idx = indexById(teams, id);
+    public void delete(String eventId, String teamId) {
+        logger.info("Deleting team for event {}", eventId);
+        EventsConfig.EventEntry event = eventsConfig.getEvent(eventId);
+        List<Team> teams = teamsRepository.findAll(event.getTeamsFilename());
+        int idx = indexById(teams, teamId);
         teams.remove(idx);
-        teamsRepository.saveAll(teams);
+        teamsRepository.saveAll(event.getTeamsFilename(), teams);
     }
 
     // -----------------------------------------------------------------------

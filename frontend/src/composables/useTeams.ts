@@ -9,7 +9,7 @@ import type { Team, TeamRequest } from '../types';
  * Auto-fetches on creation. All mutating operations (create, update, delete)
  * refresh the list from the server after a successful response.
  */
-export function useTeams(apiBaseUrl: string): {
+export function useTeams(apiBaseUrl: string, eventId: string): {
   teams: Ref<Team[]>;
   loading: Ref<boolean>;
   error: Ref<string | null>;
@@ -26,7 +26,7 @@ export function useTeams(apiBaseUrl: string): {
     loading.value = true;
     error.value = null;
     try {
-      const res = await fetch(`${apiBaseUrl}/api/teams`);
+      const res = await fetch(`${apiBaseUrl}/api/teams?eventId=${encodeURIComponent(eventId)}`);
       if (!res.ok) {
         error.value = `Failed to load teams: HTTP ${res.status}`;
         teams.value = [];
@@ -42,7 +42,7 @@ export function useTeams(apiBaseUrl: string): {
   }
 
   async function createTeam(req: TeamRequest): Promise<void> {
-    const res = await fetch(`${apiBaseUrl}/api/teams`, {
+    const res = await fetch(`${apiBaseUrl}/api/teams?eventId=${encodeURIComponent(eventId)}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(req),
@@ -55,7 +55,7 @@ export function useTeams(apiBaseUrl: string): {
   }
 
   async function updateTeam(id: string, req: TeamRequest): Promise<void> {
-    const res = await fetch(`${apiBaseUrl}/api/teams/${encodeURIComponent(id)}`, {
+    const res = await fetch(`${apiBaseUrl}/api/teams/${encodeURIComponent(id)}?eventId=${encodeURIComponent(eventId)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(req),
@@ -68,7 +68,7 @@ export function useTeams(apiBaseUrl: string): {
   }
 
   async function deleteTeam(id: string): Promise<void> {
-    const res = await fetch(`${apiBaseUrl}/api/teams/${encodeURIComponent(id)}`, {
+    const res = await fetch(`${apiBaseUrl}/api/teams/${encodeURIComponent(id)}?eventId=${encodeURIComponent(eventId)}`, {
       method: 'DELETE',
     });
     if (!res.ok) {
